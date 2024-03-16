@@ -1,46 +1,68 @@
 import cv2
-import numpy as np
+import imutils
 
-def motionDetection():
-    cap = cv2.VideoCapture(0)
-    alarm_triggered = False
+# Function to continuously capture video frames and detect motion
+def detect_motion(camera_index):
+    camera = cv2.VideoCapture(camera_index)
+    camera.set(3, 640)  # Set frame width
+    camera.set(4, 480)  # Set frame height
+    
+    # Initialize variables
+    alarm = False
+    alarm_counter = 0
+    first_frame = None
 
-    while cap.isOpened():
-        ret, frame1 = cap.read()
-        ret, frame2 = cap.read()
+    while True:
+        _, frame = camera.read()
+        frame = imutils.resize(frame, width=500)
+        gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        blurred_frame = cv2.GaussianBlur(gray_frame, (21, 21), 0)
 
-        diff = cv2.absdiff(frame1, frame2)
-        diff_gray = cv2.cvtColor(diff, cv2.COLOR_BGR2GRAY)
-        blur = cv2.GaussianBlur(diff_gray, (5, 5), 0)
-        
-        # Calculate the magnitude of the difference between frames
-        magnitude = cv2.norm(blur, cv2.NORM_L1)
-        
-        _, thresh = cv2.threshold(blur, 20, 255, cv2.THRESH_BINARY)
-        dilated = cv2.dilate(thresh, None, iterations=3)
-        contours, _ = cv2.findContours(dilated, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        if first_frame is None:
+            first_frame = blurred_frame
+            continue
 
-        # Check for significant motion
-        if magnitude > 200:
-            if not alarm_triggered:
-                # Play alarm
-                cv2.putText(frame1, "ALARM: {}".format('MOTION DETECTED'), (10, 60), cv2.FONT_HERSHEY_SIMPLEX,
-                            1, (0, 0, 255), 2)
-                alarm_triggered = True
+        frame_delta = cv2.absdiff(first_frame, blurred_frame)
+        thresh = cv2.threshold(frame_delta, 30, 255, cv2.THRESH_BINARY)[1]
+        thresh = cv2.dilate(thresh, None, iterations=2)
+        contours = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        contours = imutils.grab_contours(contours)
+
+        # Check for motion
+        motion_detected = False
+        for contour in contours:
+            if cv2.contourArea(contour) > 300:
+                motion_detected = True
+                break
+
+        if motion_detected:
+            alarm_counter += 1
+            if not alarm:
+                print("Motion detected!")
+                alarm = True
         else:
-            # Change color of detected motion area to white
-            frame1[dilated > 0] = [255, 255, 255]
+            alarm_counter -= 1
+            alarm_counter = max(alarm_counter, 0)
 
-            # Reset alarm trigger
-            alarm_triggered = False
+        if alarm_counter > 20:
+            alarm = True
+        else:
+            alarm = False
 
-        cv2.imshow("Video", frame1)
+        # Display video feed
+        if alarm:
+            cv2.putText(frame, "ALERT: MOTION DETECTED", (10, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
+        cv2.imshow("Video Feed", frame)
 
-        if cv2.waitKey(50) == 27:
+        key = cv2.waitKey(1) & 0xFF
+        if key == ord("q"):
             break
+        elif key == ord("t"):
+            alarm = not alarm
 
-    cap.release()
+    camera.release()
     cv2.destroyAllWindows()
 
-if __name__ == "__main__":
-    motionDetection()
+# Start motion detection on primary camera (index 0)
+detect_motion(0)
+
