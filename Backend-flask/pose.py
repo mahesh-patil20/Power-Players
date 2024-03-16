@@ -1,78 +1,52 @@
-import tensorflow as tf
-from tensorflow.keras import layers, models
 
-# Step 1: Data Collection
-# Code to gather camera footage dataset
-import os
+#import packages
 import cv2
+import mediapipe as mp
 import numpy as np
 
-def load_dataset(dataset_dir):
-    classes = os.listdir(dataset_dir)
-    class_to_index = {class_name: i for i, class_name in enumerate(classes)}
-    images = []
-    labels = []
+# initialize mediapipe pose solution
+mp_pose = mp.solutions.pose
+mp_draw = mp.solutions.drawing_utils
+pose = mp_pose.Pose()
 
-    for class_name in classes:
-        class_dir = os.path.join(dataset_dir, class_name)
-        for file_name in os.listdir(class_dir):
-            file_path = os.path.join(class_dir, file_name)
-            # Assuming images are in a format readable by OpenCV
-            image = cv2.imread(file_path)
-            if image is not None:
-                images.append(image)
-                labels.append(class_to_index[class_name])
+# take video input for pose detection
+# you can put here video of your choice
+cap = cv2.VideoCapture("sampleVideo.mp4")
 
-    return np.array(images), np.array(labels)
+# take live camera  input for pose detection
+# cap = cv2.VideoCapture(0)
 
-# Example usage:
-dataset_dir = "/path/to/dataset"
-images, labels = load_dataset(dataset_dir)
-print("Number of images:", len(images))
-print("Number of labels:", len(labels))
+# read each frame/image from capture object
+while True:
+    ret, img = cap.read()
+    # resize image/frame so we can accommodate it on our screen
+    img = cv2.resize(img, (600, 400))
 
+    # do Pose detection
+    results = pose.process(img)
+    # draw the detected pose on original video/ live stream
+    mp_draw.draw_landmarks(img, results.pose_landmarks, mp_pose.POSE_CONNECTIONS,
+                           mp_draw.DrawingSpec((255, 0, 0), 2, 2),
+                           mp_draw.DrawingSpec((255, 0, 255), 2, 2)
+                           )
+    # Display pose on original video/live stream
+    cv2.imshow("Pose Estimation", img)
 
-# Step 2: Annotation
-# Code to annotate the dataset (manually or using automated techniques)
+    # Extract and draw pose on plain white image
+    h, w, c = img.shape   # get shape of original frame
+    opImg = np.zeros([h, w, c])  # create blank image with original frame size
+    opImg.fill(255)  # set white background. put 0 if you want to make it black
 
-# Step 3: Preprocessing
-# Code to preprocess the dataset (resizing, cropping, normalization)
+    # draw extracted pose on black white image
+    mp_draw.draw_landmarks(opImg, results.pose_landmarks, mp_pose.POSE_CONNECTIONS,
+                           mp_draw.DrawingSpec((255, 0, 0), 2, 2),
+                           mp_draw.DrawingSpec((255, 0, 255), 2, 2)
+                           )
+    # display extracted pose on blank images
+    cv2.imshow("Extracted Pose", opImg)
 
-# Step 4: Model Selection
-def create_pose_detection_model():
-    model = models.Sequential([
-        # CNN layers for image processing
-        layers.Conv2D(32, (3, 3), activation='relu', input_shape=(image_height, image_width, 3)),
-        layers.MaxPooling2D((2, 2)),
-        layers.Conv2D(64, (3, 3), activation='relu'),
-        layers.MaxPooling2D((2, 2)),
-        layers.Conv2D(64, (3, 3), activation='relu'),
-        layers.Flatten(),
-        # Dense layers for classification
-        layers.Dense(64, activation='relu'),
-        layers.Dense(1, activation='sigmoid')
-    ])
-    return model
+    # print all landmarks
+    print(results.pose_landmarks)
 
-# Step 5: Training
-model = create_pose_detection_model()
-model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
-
-# Train the model using the annotated dataset
-model.fit(train_images, train_labels, epochs=10, batch_size=32, validation_data=(val_images, val_labels))
-
-# Step 6: Evaluation
-test_loss, test_accuracy = model.evaluate(test_images, test_labels)
-print("Test Accuracy:", test_accuracy)
-
-# Step 7: Fine-tuning (if necessary)
-# Code for fine-tuning the model based on evaluation results
-
-# Step 8: Deployment
-# Code for deploying the model for real-time or batch processing of camera footage
-
-# Step 9: Monitoring and Maintenance
-# Code for monitoring the model's performance and updating as needed
-
-# Step 10: Ethical Considerations
-# Code to ensure ethical deployment and use of the model
+    cv2.waitKey(1)
+    
