@@ -114,6 +114,9 @@ const Login = (props) => {
                 className="login_label"
                 htmlFor="login_chk"
                 aria-hidden="true"
+                style={{
+                  color: "black"
+                }}
               >
                 Register
               </label>

@@ -13,5 +13,31 @@ router.get('/getIntruders', async (req, res) => {
 }
 );
 
+router.get('/getLatestIntruderImage', async (req, res) => {
+    try {
+        // Find the latest intruder by sorting in descending order and limiting to 1
+        console.log("Inside getLatestIntruderImage")    
+        const latestIntruder = await Intruders.find({}, { intruder_image_base64: 1, _id: 0 })
+                                            .sort({ timestamp: -1 })
+                                            .limit(1);
+        return res.status(200).json(latestIntruder);
+    } catch (error) {
+        return res.status(500).json({ error: "Some error occurred" });
+    }
+});
+
+
+
+router.post('/deleteintruders', async (req, res) => {
+    console.log("Inside deleteintruders")
+    try {
+        const intruders = await Intruders.deleteMany();
+        return res.status(200).json(intruders);
+    } catch (error) {
+        return res.status(500).json({ error: "Some error occured" });
+    }
+}
+);
+
 
 module.exports = router;

@@ -71,15 +71,25 @@ const AddAllowedList = () => {
           justifyContent: "right",
           alignItems: "center",
           padding: "10px",
-          color: "white"
+          width: "100%",
+          // border: "2px solid green"
         }}
       >
         <Button
           variant="contained"
-          color="primary"
+  
           onClick={() => setOpen(true)}
+          style={{
+            margin: "20px",
+            backgroundColor: "#68e5ff",
+            width: "300px",  
+          }}
         >
+          <h4 style={{
+            color: "black",
+          }}>
           Add Allowed Member +
+          </h4>
         </Button>
       </div>
     <div
@@ -145,8 +155,17 @@ const AddAllowedList = () => {
                 display: "flex",
                 justifyContent: "center",
               }}>
-              <Button type="submit" variant="contained" color="primary">
-                Submit
+              <Button type="submit" variant="contained" style={{
+          margin: "20px",
+          display: "block",
+          marginLeft: "auto",
+          marginRight: "auto",
+          backgroundColor: "#68e5ff",
+          color: "black",
+          fontWeight: "bold",
+        
+        }}>
+                <h4 style={{color: "black"}}>Submit</h4>
               </Button>
               </div>
             </form>

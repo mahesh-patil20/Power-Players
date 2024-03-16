@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import Webcam from 'react-webcam';
-
+import { Button } from '@mui/material';
 const Live = () => {
   const webcamRef = React.useRef(null);
   const mediaRecorderRef = React.useRef(null);
@@ -52,14 +52,42 @@ const Live = () => {
 
   return (
     <>
-      {stream ? <Webcam audio={false} ref={webcamRef} /> : <p>Waiting for camera access...</p>}
+      
+      {stream ? <div style={{width: "45%", margin:"0 auto", padding:"1rem"}}><Webcam audio={false} ref={webcamRef} /> </div>: <p style={{textAlign: "center", margin:"10px"}}>Waiting for camera access...</p>}
       {capturing ? (
-        <button onClick={handleStopCaptureClick}>Stop Capture</button>
+        <Button onClick={handleStopCaptureClick} style={{
+          margin: "20px",
+          display: "block",
+          marginLeft: "auto",
+          marginRight: "auto",
+          backgroundColor: "#68e5ff",
+          color: "black",
+          fontWeight: "bold",
+        
+        }}>Stop Capture</Button>
       ) : (
-        <button onClick={handleStartCaptureClick}>Start Capture</button>
+        <Button onClick={handleStartCaptureClick} style={{
+          margin: "20px",
+          display: "block",
+          marginLeft: "auto",
+          marginRight: "auto",
+          backgroundColor: "#68e5ff",
+          color: "black",
+          fontWeight: "bold",
+        
+        }}>Start Capture</Button>
       )}
       {recordedChunks.length > 0 && (
-        <button onClick={handleDownload}>Download</button>
+        <Button onClick={handleDownload} style={{
+          margin: "20px",
+          display: "block",
+          marginLeft: "auto",
+          marginRight: "auto",
+          backgroundColor: "#68e5ff",
+          color: "black",
+          fontWeight: "bold",
+        
+        }}>Download</Button>
       )}
     </>
   );
