@@ -4,15 +4,15 @@ import threading
 import time
 import face_recognition
 import numpy as np
-import os 
+import os
 import cv2
-import requests
 from pymongo import MongoClient
 from dotenv import load_dotenv
 import base64
 from flask_cors import CORS
+from keras.models import model_from_json
 
-app = Flask(__name__)
+app = Flask(_name_)
 CORS(app)
 
 env_path = '../server/config.env'  # Update with your actual path
@@ -28,14 +28,24 @@ client = MongoClient(MONGODB_URL)
 db = client['test']
 collection = db['intruders']
 collection2 = db['alloweduserlists']
-# print(collection2)
-# print(collection)
+
 # Placeholder for known encodings and names
 known_encodings = []
 known_names = []
 face_recognition_active = False
 video_capture = None
 stop_thread = False
+
+# Load emotion detection model
+json_file = open('models/emotion_model.json', 'r')
+loaded_model_json = json_file.read()
+json_file.close()
+emotion_model = model_from_json(loaded_model_json)
+emotion_model.load_weights("models/emotion_model.h5")
+print("Loaded emotion detection model from disk")
+
+# Define emotion dictionary
+emotion_dict = {0: "Angry", 1: "Disgusted", 2: "Fearful", 3: "Happy", 4: "Neutral", 5: "Sad", 6: "Surprised"}
 
 def fetch_and_train_allowed_faces():
     global known_encodings, known_names
@@ -91,8 +101,11 @@ def start_face_recognition():
                         _, encoded_image = cv2.imencode('.jpg', frame[top:bottom, left:right])
                         intruder_image_base64 = base64.b64encode(encoded_image).decode('utf-8')
                         current_time = str(datetime.datetime.now())
+                        # Detect emotion of the intruder
+                        emotion_prediction = detect_emotion(frame[top:bottom, left:right])
                         encoding_data = {
                             'intruder_image_base64': intruder_image_base64,
+                            'emotion': emotion_prediction,
                             'timestamp': current_time
                         }
                         collection.insert_one(encoding_data)
@@ -105,6 +118,15 @@ def stop_face_recognition():
     global face_recognition_active, stop_thread
     face_recognition_active = False
     stop_thread = True
+
+def detect_emotion(image):
+    gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    resized_image = cv2.resize(gray_image, (48, 48))
+    normalized_image = resized_image / 255.0  # Normalize pixel values
+    input_image = np.expand_dims(np.expand_dims(normalized_image, -1), 0)  # Add batch dimension
+    emotion_prediction = emotion_model.predict(input_image)
+    emotion_index = np.argmax(emotion_prediction)
+    return emotion_dict[emotion_index]
 
 @app.route('/')
 def home():
@@ -131,11 +153,12 @@ def stop():
     else:
         return jsonify({'message': 'Face recognition not active.'})
     
+  
 @app.route('/fetch_intruders', methods=['GET'])
 def fetch_intruders():
     cursor = collection.find({}, {'_id': 0})
     intruders = list(cursor)
     return jsonify(intruders)
 
-if __name__ == '__main__':
+if _name_ == '_main_':
     app.run(debug=True, port=7000)

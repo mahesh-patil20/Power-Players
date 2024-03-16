@@ -32,7 +32,7 @@ const UserHome = () => {
     // Call API request based on the toggle state
     if (!checked) {
       // API request for turning ON
-      axios.get('http://127.0.0.1:5000/start')
+      axios.get('http://127.0.0.1:7000/start')
         .then(response => {
           console.log('System turned ON:', response.data);
         })
@@ -41,7 +41,7 @@ const UserHome = () => {
         });
     } else {
       // API request for turning OFF
-      axios.get('http://127.0.0.1:5000/stop')
+      axios.get('http://127.0.0.1:7000/stop')
         .then(response => {
           console.log('System turned OFF:', response.data);
         })
