@@ -9,18 +9,17 @@ router.post("/send-email", async (req, res) => {
   // Create a Nodemailer transporter using SMTP
   let transporter = nodemailer.createTransport({
     host: "smtp.gmail.com", // Your SMTP server host
-    port: 587, // Port
-    secure: false, // Upgrade later with STARTTLS
+    port: 465, // Port // true for 465, false for other ports
     auth: {
-      user: "warrior786Test@gmail.com", // Your email address
-      pass: "svzn ljgc qwdx jtod", // Your password
+      user: "maxfurry3009@gmail.com", // Your email address
+      pass: "ixwx wnax livu utbh", // Your generated app password
     },
   });
 
   // Email message options
   let mailOptions = {
-    from: "warrior786Test@gmail.com", // Sender address
-    to: "mahesh.patil@spit.ac.in", // List of recipients
+    from: "maxfurry3009@gmail.com", // Sender address
+    to: "udit.rao@spit.ac.in", // List of recipients
     subject: "Intrusion at " + time, // Subject line
     text: "Image captured at " + time, // Plain text body
     attachments: [

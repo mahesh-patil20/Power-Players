@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-
+import Live from '../../components/Live';
 import {
   Table,
   TableBody,
@@ -22,6 +22,26 @@ const UserHome = () => {
 
   const handleChange = () => {
     setChecked(!checked);
+    // Call API request based on the toggle state
+    if (!checked) {
+      // API request for turning ON
+      axios.get('http://127.0.0.1:5000/start')
+        .then(response => {
+          console.log('System turned ON:', response.data);
+        })
+        .catch(error => {
+          console.error('Error turning ON system:', error);
+        });
+    } else {
+      // API request for turning OFF
+      axios.get('http://127.0.0.1:5000/stop')
+        .then(response => {
+          console.log('System turned OFF:', response.data);
+        })
+        .catch(error => {
+          console.error('Error turning OFF system:', error);
+        });
+    }
   };
 
   useEffect(() => {
@@ -92,6 +112,7 @@ const UserHome = () => {
 
   return (
     <>
+      <Live />
       <AddAllowedList />
       <div>
         System Security Status
