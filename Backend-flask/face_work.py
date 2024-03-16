@@ -4,8 +4,9 @@ import threading
 import time
 import face_recognition
 import numpy as np
-import os
+import os 
 import cv2
+import requests
 from pymongo import MongoClient
 from dotenv import load_dotenv
 import base64
