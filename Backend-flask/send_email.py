@@ -5,7 +5,7 @@ from email.mime.text import MIMEText
 
 email_sender = 'maxfurry3009@gmail.com'
 email_password = 'ixwx wnax livu utbh'
-email_receiver = 'pranaysinghvi2003@gmail.com'
+email_receiver = 'pranay.singhvi@spit.ac.in'
 
 subject = 'Check Your Child History'
 html_body = """
@@ -131,7 +131,7 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
   <tr>
     <td style="padding-right: 0px;padding-left: 0px;" align="center">
       
-      <img align="center" border="0" src="images/image-2.png" alt="Logo" title="Logo" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 69%;max-width: 400.2px;" width="400.2" class="v-src-width v-src-max-width"/>
+      <img align="center" border="0" src="https://commons.wikimedia.org/wiki/File:Image_created_with_a_mobile_phone.png#/media/File:Image_created_with_a_mobile_phone.png" alt="Logo" title="Logo" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 69%;max-width: 400.2px;" width="400.2" class="v-src-width v-src-max-width"/>
       
     </td>
   </tr>
