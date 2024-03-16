@@ -1,12 +1,11 @@
 import cv2
 
-def is_camera_covered():
-    # Open the camera
-    cap = cv2.VideoCapture(0)
+import cv2
 
-    while cap.isOpened():
+def is_camera_covered(video_capture):
+    while video_capture.isOpened():
         # Capture a frame from the camera
-        ret, frame = cap.read()
+        ret, frame = video_capture.read()
 
         # Check if the frame was captured successfully
         if not ret:
@@ -29,19 +28,11 @@ def is_camera_covered():
         # Check if the number of white pixels exceeds the threshold
         if num_white_pixels > threshold_value:
             cv2.putText(frame, "Camera is not covered", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+            return False
         else:
             cv2.putText(frame, "Camera is covered", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+            return True
 
-        # Display the frame
-        cv2.imshow('Camera Feed', frame)
-
-        # Check for the 'q' key to quit the loop
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
-
-    # Release the camera and close all OpenCV windows
-    cap.release()
+    # Release the camera
+    video_capture.release()
     cv2.destroyAllWindows()
-
-# Call the function to check if the camera is covered
-is_camera_covered()

@@ -1,27 +1,26 @@
 import datetime
+from email.mime.image import MIMEImage
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 from flask import Flask, jsonify, request
 import threading
 import time
 import face_recognition
+from flask_cors import CORS
 import numpy as np
-import os
+import os 
 import cv2
+import requests
 from pymongo import MongoClient
 from dotenv import load_dotenv
 import base64
-from flask_cors import CORS
+import black_screen
 from keras.models import model_from_json
-import ssl
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-from email.mime.image import MIMEImage
-import requests
-import base64
 from PIL import Image
 from io import BytesIO
 from twilio.rest import Client
-
+import ssl
+import smtplib
 
 app = Flask(__name__)
 CORS(app)
@@ -91,6 +90,11 @@ def start_face_recognition():
             time.sleep(0.1)
             continue
         
+        # Check if the camera is covered before proceeding with face recognition
+        if black_screen.is_camera_covered(video_capture):
+            print("Camera is covered. Face recognition cannot proceed.")
+            continue  # Skip face recognition if the camera is covered
+        
         ret, frame = video_capture.read()
         face_locations = face_recognition.face_locations(frame)
          
@@ -135,6 +139,8 @@ def start_face_recognition():
         cv2.imshow('Video', frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
+
+
 
 def stop_face_recognition():
     global face_recognition_active, stop_thread
