@@ -90,7 +90,7 @@ def start_face_recognition():
             continue
         
         # Check if the camera is covered before proceeding with face recognition
-        if is_camera_covered():
+        if is_camera_covered(video_capture):
             print("Camera is covered. Face recognition cannot proceed.")
             continue  # Skip face recognition if the camera is covered
         
