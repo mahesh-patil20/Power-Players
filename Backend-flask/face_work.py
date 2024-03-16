@@ -130,6 +130,12 @@ def stop():
         return jsonify({'message': 'Face recognition stopped.'})
     else:
         return jsonify({'message': 'Face recognition not active.'})
+    
+@app.route('/fetch_intruders', methods=['GET'])
+def fetch_intruders():
+    cursor = collection.find({}, {'_id': 0})
+    intruders = list(cursor)
+    return jsonify(intruders)
 
 if __name__ == '__main__':
     app.run(debug=True, port=7000)

@@ -54,9 +54,22 @@ const UserHome = () => {
   useEffect(() => {
     fetchAllowedUsers();
     fetchIntruders();
+
     localStorage.setItem('systemSecurity', false); // Store the value in local storage
     // SendEmail('2021-10-10 10:10:10', 'image');
   }, []);
+
+
+  useEffect(() => {
+    axios.get('http://localhost:5000/getLatestIntruderImage')
+      .then(response => {
+       console.log(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching latest intruder image:', error);
+      });
+  }, []);
+  
 
   const SendEmail =  (time, image) => {
     try {

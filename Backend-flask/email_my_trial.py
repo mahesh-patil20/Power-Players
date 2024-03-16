@@ -7,7 +7,7 @@ import requests
 
 email_sender = 'maxfurry3009@gmail.com'
 email_password = 'ixwx wnax livu utbh'
-email_receiver = 'akash.panicker@spit.ac.in'
+email_receiver = 'mahesh.patil@spit.ac.in'
 
 subject = 'Check Your Child History'
 
