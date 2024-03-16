@@ -18,20 +18,11 @@ def motionDetection():
         dilated = cv2.dilate(thresh, None, iterations=3)
         contours, _ = cv2.findContours(dilated, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
-        max_contour_area = 0
-        max_contour = None
-
         for contour in contours:
+            x, y, w, h = cv2.boundingRect(contour)
             area = cv2.contourArea(contour)
-            if area < 900 or magnitude < 200:  # Adjust the threshold for significant motion
+            if area < 30000 and w > 1000 or h > 1000 or magnitude < 200 :  # Adjust these parameters as needed
                 continue
-            
-            if area > max_contour_area:
-                max_contour_area = area
-                max_contour = contour
-
-        if max_contour is not None:
-            x, y, w, h = cv2.boundingRect(max_contour)
             cv2.rectangle(frame1, (x, y), (x+w, y+h), (0, 255, 0), 2)
             cv2.putText(frame1, "STATUS: {}".format('MOTION DETECTED'), (10, 60), cv2.FONT_HERSHEY_SIMPLEX,
                         1, (217, 10, 10), 2)
