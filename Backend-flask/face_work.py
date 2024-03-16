@@ -10,8 +10,10 @@ import requests
 from pymongo import MongoClient
 from dotenv import load_dotenv
 import base64
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 env_path = '../server/config.env'  # Update with your actual path
 
@@ -25,6 +27,8 @@ MONGODB_URL = os.getenv('MONGODB_URL')
 client = MongoClient(MONGODB_URL)
 db = client['test']
 collection = db['intruders']
+collection2 = db['alloweduserlists']
+# print(collection2)
 # print(collection)
 # Placeholder for known encodings and names
 known_encodings = []
@@ -33,19 +37,25 @@ face_recognition_active = False
 video_capture = None
 stop_thread = False
 
-def load_known_faces(image_folder):
+def fetch_and_train_allowed_faces():
     global known_encodings, known_names
-    # Load images and encode known faces
-    face_images = [os.path.join(image_folder, img) for img in os.listdir(image_folder) if img.endswith(".jpg")]
-    for image_path in face_images:
-        # Extract the name from the image file name
-        name = os.path.splitext(os.path.basename(image_path))[0]
-        known_names.append(name)
-
-        # Load and encode the face
-        image = face_recognition.load_image_file(image_path)
-        encoding = face_recognition.face_encodings(image)[0]  # Assuming only one face per image
-        known_encodings.append(encoding)
+    cursor = collection2.find({}, {'name': 1, 'image': 1, '_id': 0})
+    for user in cursor:
+        encoded_image = user['image'] if user and 'image' in user else None
+        if encoded_image:
+            # Decode the base64 image and convert it to a NumPy array
+            image_bytes = base64.b64decode(encoded_image.split(',')[1])
+            image_np = np.frombuffer(image_bytes, dtype=np.uint8)
+            image = cv2.imdecode(image_np, cv2.IMREAD_COLOR)
+            # Convert the image to RGB format (required for face recognition)
+            rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+            # Detect face locations and encodings
+            face_locations = face_recognition.face_locations(rgb_image)
+            face_encodings = face_recognition.face_encodings(rgb_image, face_locations)
+            if face_encodings:
+                known_encodings.extend(face_encodings)
+                known_names.extend([user['name']] * len(face_encodings))
+    print("Faces fetched and trained successfully.")
 
 def start_face_recognition():
     global face_recognition_active, video_capture, stop_thread, intruder_detected
@@ -70,7 +80,7 @@ def start_face_recognition():
                 face_distances = face_recognition.face_distance(known_encodings, face_encodings[0])
                 best_match_index = np.argmin(face_distances)
 
-                if face_distances[best_match_index] < 0.5:
+                if face_distances[best_match_index] < 0.55:
                     name = known_names[best_match_index]
                     print(f"Known face detected: {name}")
                     intruder_detected = False  # Reset the intruder flag
@@ -107,6 +117,7 @@ def start():
         face_recognition_active = True
         stop_thread = False
         threading.Thread(target=start_face_recognition).start()
+        fetch_and_train_allowed_faces()  # Fetch and train allowed faces before starting
         return jsonify({'message': 'Face recognition started.'})
     else:
         return jsonify({'message': 'Face recognition already active.'})
@@ -118,8 +129,7 @@ def stop():
         stop_face_recognition()
         return jsonify({'message': 'Face recognition stopped.'})
     else:
-        return
+        return jsonify({'message': 'Face recognition not active.'})
 
 if __name__ == '__main__':
-    load_known_faces(r"trial_images")  # Load known faces from the image folder
-    app.run(debug=True)
+    app.run(debug=True, port=7000)
