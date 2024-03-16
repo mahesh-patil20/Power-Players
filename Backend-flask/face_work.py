@@ -1,8 +1,12 @@
 import datetime
+from email.mime.image import MIMEImage
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 from flask import Flask, jsonify, request
 import threading
 import time
 import face_recognition
+from flask_cors import CORS
 import numpy as np
 import os 
 import cv2
@@ -11,6 +15,13 @@ from pymongo import MongoClient
 from dotenv import load_dotenv
 import base64
 from black_screen import is_camera_covered
+from keras.models import model_from_json
+from PIL import Image
+from io import BytesIO
+from twilio.rest import Client
+import ssl
+import smtplib
+
 app = Flask(__name__)
 CORS(app)
 
