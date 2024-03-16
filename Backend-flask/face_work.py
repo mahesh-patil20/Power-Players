@@ -11,6 +11,17 @@ from dotenv import load_dotenv
 import base64
 from flask_cors import CORS
 from keras.models import model_from_json
+import ssl
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.image import MIMEImage
+import requests
+import base64
+from PIL import Image
+from io import BytesIO
+from twilio.rest import Client
+
 
 app = Flask(__name__)
 CORS(app)
@@ -71,6 +82,7 @@ def start_face_recognition():
     global face_recognition_active, video_capture, stop_thread, intruder_detected
     intruder_detected = False
     video_capture = cv2.VideoCapture(0)
+    flag = 1
     while True:
         if stop_thread:
             video_capture.release()
@@ -109,6 +121,12 @@ def start_face_recognition():
                             'timestamp': current_time
                         }
                         collection.insert_one(encoding_data)
+                        print("Hello")
+                        requests.post('http://127.0.0.1:7000/send_email')
+                        flag += 1
+                        if flag%20==0:
+                            requests.post('http://127.0.0.1:7000/send_sms')
+                        print("World")
                         intruder_detected = True  # Set intruder flag to prevent further captures
         cv2.imshow('Video', frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -152,13 +170,178 @@ def stop():
         return jsonify({'message': 'Face recognition stopped.'})
     else:
         return jsonify({'message': 'Face recognition not active.'})
-    
-  
+
+@app.route('/send_email', methods = ['GET','POST'])
+def sending():
+    # Email credentials and recipient
+    # FINAL WORKING AUTOMATED EMAIL SYSTEM FOR INTRUDER DETECTION
+# Email credentials and recipient
+    email_sender = 'maxfurry3009@gmail.com'
+    email_password = 'ixwx wnax livu utbh'  # Insert your email password here
+    email_receiver = 'akash.panicker@spit.ac.in'
+
+    subject = 'Check Your Child History'
+
+    # URL where the Base64-encoded image is located
+    base64_image_url = 'http://localhost:5000/getLatestIntruderImage'  # Replace with the actual URL
+
+    # Function to fetch the Base64-encoded image using requests
+    def get_base64_image_data(base64_image_url):
+        response = requests.get(base64_image_url)
+        return response.json()[0]['intruder_image_base64']  # Extract the Base64-encoded image
+
+    # Get the image data
+    image_data = get_base64_image_data(base64_image_url)
+
+    # Create the email message
+    msg = MIMEMultipart()
+    msg['From'] = email_sender
+    msg['To'] = email_receiver
+    msg['Subject'] = subject
+
+    # Function to attach image with MIME subtype based on Pillow
+    def attach_image_with_subtype(msg, image_data):
+        image = Image.open(BytesIO(base64.b64decode(image_data)))
+        image_type = image.format.lower()
+        
+        if image_type in ['jpeg', 'jpg']:
+            image_subtype = 'jpeg'
+        elif image_type == 'png':
+            image_subtype = 'png'
+        else:
+            print("Warning: Unsupported image format")
+            return
+
+        image_data = base64.b64decode(image_data)
+        image = MIMEImage(image_data, subtype=image_subtype)
+        image.add_header('Content-ID', '<image_cid>')
+        msg.attach(image)
+
+    # Attach the fetched image to the email
+    attach_image_with_subtype(msg, image_data)
+
+    # Update HTML body to use attached image
+    html_body = f"""
+    <!DOCTYPE html>
+    <html>
+    <body>
+    <h1>ALERT !! Intruder Detected </h1>
+    <h3>Location: ATHARVA COLLEGE OF ENGINEERING, MALAD</h3>
+    <p>Here is the image</p><br>
+    <img src="cid:image_cid" alt="Fetched Image">
+    <h3>Click Yes, If you want to send help request to Emergency Services</h3>
+    <a href="http://localhost:7000/send_to_authority" style="background-color: gray; color: white; padding: 10px 20px; text-decoration: none; display: inline-block;">Yes</a>
+    </body>
+    </html>
+    """
+
+    msg.attach(MIMEText(html_body, 'html'))
+
+    # Send the email
+    context = ssl.create_default_context()
+
+    with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
+        smtp.login(email_sender, email_password)
+        smtp.sendmail(email_sender, email_receiver, msg.as_string())
+    print("Email sent successfully!")
+    return jsonify({"message": "Email sent successfully"}), 200
+
+@app.route('/send_to_authority', methods = ['POST','GET'])
+def send_to_auth():
+    email_sender = 'maxfurry3009@gmail.com'
+    email_password = 'ixwx wnax livu utbh'  # Insert your email password here
+    email_receiver = 'mahesh.patil@spit.ac.in'
+
+    subject = 'Check Your Child History'
+
+    # URL where the Base64-encoded image is located
+    base64_image_url = 'http://localhost:5000/getLatestIntruderImage'  # Replace with the actual URL
+
+    # Function to fetch the Base64-encoded image using requests
+    def get_base64_image_data(base64_image_url):
+        response = requests.get(base64_image_url)
+        return response.json()[0]['intruder_image_base64']  # Extract the Base64-encoded image
+
+    # Get the image data
+    image_data = get_base64_image_data(base64_image_url)
+
+    # Create the email message
+    msg = MIMEMultipart()
+    msg['From'] = email_sender
+    msg['To'] = email_receiver
+    msg['Subject'] = subject
+
+    # Function to attach image with MIME subtype based on Pillow
+    def attach_image_with_subtype(msg, image_data):
+        image = Image.open(BytesIO(base64.b64decode(image_data)))
+        image_type = image.format.lower()
+        
+        if image_type in ['jpeg', 'jpg']:
+            image_subtype = 'jpeg'
+        elif image_type == 'png':
+            image_subtype = 'png'
+        else:
+            print("Warning: Unsupported image format")
+            return
+
+        image_data = base64.b64decode(image_data)
+        image = MIMEImage(image_data, subtype=image_subtype)
+        image.add_header('Content-ID', '<image_cid>')
+        msg.attach(image)
+
+    # Attach the fetched image to the email
+    attach_image_with_subtype(msg, image_data)
+
+    # Update HTML body to use attached image
+    html_body = f"""
+    <!DOCTYPE html>
+    <html>
+    <body>
+    <h1> Emergency</h1>
+    <h3>Dear Police Department, I am writing to report an emergency at ATHARVA COLLEGE OF ENGINEERING, MALAD</h3>
+    <p>Here is the image of the suspect</p><br>
+    <img src="cid:image_cid" alt="Fetched Image">
+    </body>
+    </html>
+    """
+
+    msg.attach(MIMEText(html_body, 'html'))
+
+    # Send the email
+    context = ssl.create_default_context()
+
+    with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
+        smtp.login(email_sender, email_password)
+        smtp.sendmail(email_sender, email_receiver, msg.as_string())
+
+    print("Email sent successfully!")
+    return jsonify({"message": "Email sent successfully"}), 200
+
+@app.route('/send_sms', methods = ['GET','POST'])
+def send_message():
+    account_sid = 'AC108ea743fcf1a93154a057452af67e27'
+    auth_token = '69ee464f0fdc75098208155e56059afd'
+
+    # Initialize Twilio Client
+    client = Client(account_sid, auth_token)
+
+    def send_sms(to, body):
+        try:
+            message = client.messages.create(
+                body=body,
+                from_='+15513138117',
+                to=to
+            )
+            print("SMS sent successfully with SID:", message.sid)
+        except Exception as e:
+            print("Failed to send SMS:", str(e))
+    send_sms('+919167340521', 'Intrusion detected at your home!')
+
 @app.route('/fetch_intruders', methods=['GET'])
 def fetch_intruders():
     cursor = collection.find({}, {'_id': 0})
     intruders = list(cursor)
     return jsonify(intruders)
 
-if __name__ == '_main_':
+if __name__ == '__main__':
     app.run(debug=True, port=7000)

@@ -1,3 +1,5 @@
+# FINAL WORKING AUTOMATED EMAIL SYSTEM FOR INTRUDER DETECTION
+
 import ssl
 import smtplib
 from email.mime.multipart import MIMEMultipart
@@ -7,6 +9,7 @@ import requests
 import base64
 from PIL import Image
 from io import BytesIO
+
 
 # Email credentials and recipient
 email_sender = 'maxfurry3009@gmail.com'
@@ -58,9 +61,12 @@ html_body = f"""
 <!DOCTYPE html>
 <html>
 <body>
-  <h1>Check Your Child History</h1>
-  <p>Here is the image:</p>
+  <h1>ALERT !! Intruder Detected </h1>
+  <h3>Location: ATHARVA COLLEGE OF ENGINEERING, MALAD</h3>
+  <p>Here is the image</p><br>
   <img src="cid:image_cid" alt="Fetched Image">
+  <h3>Click Yes, If you want to send help request to Emergency Services</h3>
+  <a href="http://localhost:5000/getLatestIntruderImage" style="background-color: gray; color: white; padding: 10px 20px; text-decoration: none; display: inline-block;">Yes</a>
 </body>
 </html>
 """
