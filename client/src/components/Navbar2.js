@@ -104,6 +104,26 @@ const Navbar2 = (props) => {
                 }}>Dashboard</li>
               </div>
             </NavLink>
+            <NavLink to="/livefeed"
+              style={({ isActive }) => ({
+                color: isActive ? '#67e5fc' : '#67e5fc',
+                textDecoration: 'none',
+                fontWeight: '500',
+                // background: isActive ? '#7600dc' : '#f0f0f0',
+              })}
+            >
+              <div style={{
+                display: "flex",
+                flexDirection: window.innerWidth <= 768 ? "row" : "column",
+                alignItems: "center",
+              }}>
+                <FontAwesomeIcon icon={faHome} />
+                <li className='listItem' onClick={() => setShowMediaIcons(false)} style={{
+                  fontWeight: '600',
+                  marginLeft: window.innerWidth <= 768 ? "10px" : "0px",
+                }}>Live Feed</li>
+              </div>
+            </NavLink>
             <NavLink
               onClick={logout}
               style={({ isActive }) => ({

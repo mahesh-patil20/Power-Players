@@ -16,12 +16,14 @@ import AwesomeToggleSwitch from '../../components/AwesomeToggleSwitch';
 import Avatar from '@mui/material/Avatar';
 
 const UserHome = () => {
-  const [checked, setChecked] = useState(false);
+  const [checked, setChecked] = useState(localStorage.getItem('systemSecurity'));
   const [allowedUsers, setAllowedUsers] = useState([]);
   const [intruders, setIntruders] = useState([]);
 
   const handleChange = () => {
-    setChecked(!checked);
+    const newValue = !checked;
+    setChecked(newValue);
+    localStorage.setItem('systemSecurity', newValue); // Store the value in local storage
     // Call API request based on the toggle state
     if (!checked) {
       // API request for turning ON
@@ -47,6 +49,7 @@ const UserHome = () => {
   useEffect(() => {
     fetchAllowedUsers();
     fetchIntruders();
+    localStorage.setItem('systemSecurity', false); // Store the value in local storage
     // SendEmail('2021-10-10 10:10:10', 'image');
   }, []);
 
@@ -112,7 +115,7 @@ const UserHome = () => {
 
   return (
     <>
-      <Live />
+      {/* <Live /> */}
       <AddAllowedList />
       <div>
         System Security Status

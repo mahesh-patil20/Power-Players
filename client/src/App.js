@@ -8,6 +8,7 @@ import Home from "./pages/Visitor/Home";
 import About from "./pages/Visitor/About";
 import Dashboard from "./pages/User/Dashboard";
 import NotFound from "./components/NotFound";
+import LiveFeed from "./components/Live";
 import Login from "./pages/Visitor/Login";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -74,6 +75,7 @@ function App() {
           <Navbar2 details={{ role, setRole }} />
           <Routes>
             <Route exact path="/" element={<Dashboard />} />
+            <Route exact path="/livefeed" element={<LiveFeed />} />
           </Routes>
         </>
       )}
