@@ -10,6 +10,7 @@ import Dashboard from "./pages/User/Dashboard";
 import NotFound from "./components/NotFound";
 import LiveFeed from "./components/Live";
 import Login from "./pages/Visitor/Login";
+import EmergencyContacts from "./pages/User/EmergencyContacts";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
@@ -76,6 +77,8 @@ function App() {
           <Routes>
             <Route exact path="/" element={<Dashboard />} />
             <Route exact path="/livefeed" element={<LiveFeed />} />
+            <Route path="/emergencycontacts" element={<EmergencyContacts />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </>
       )}

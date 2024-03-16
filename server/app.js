@@ -15,6 +15,7 @@ app.use(cors({
 app.use(require('./routes/auth'));
 app.use(require('./routes/intruders'));
 app.use(require('./routes/allowedlist'));
+app.use(require('./routes/emergencylist'));
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

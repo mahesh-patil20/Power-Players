@@ -77,7 +77,7 @@ const Navbar2 = (props) => {
         </div>
         <div className={showMediaIcons ? "inmobileview itemlist" : "itemlist"} style={{
           // border: "2px solid red",
-          width: "30%",
+          width: "50%",
           alignItems: "right",
         }}>
           <ul className='List' style={{
@@ -122,6 +122,26 @@ const Navbar2 = (props) => {
                   fontWeight: '600',
                   marginLeft: window.innerWidth <= 768 ? "10px" : "0px",
                 }}>Live Feed</li>
+              </div>
+            </NavLink>
+            <NavLink to="/emergencycontacts"
+              style={({ isActive }) => ({
+                color: isActive ? '#67e5fc' : '#67e5fc',
+                textDecoration: 'none',
+                fontWeight: '500',
+                // background: isActive ? '#7600dc' : '#f0f0f0',
+              })}
+            >
+              <div style={{
+                display: "flex",
+                flexDirection: window.innerWidth <= 768 ? "row" : "column",
+                alignItems: "center",
+              }}>
+                <FontAwesomeIcon icon={faHome} />
+                <li className='listItem' onClick={() => setShowMediaIcons(false)} style={{
+                  fontWeight: '600',
+                  marginLeft: window.innerWidth <= 768 ? "10px" : "0px",
+                }}>Emergency Contacts</li>
               </div>
             </NavLink>
             <NavLink

@@ -126,6 +126,10 @@ def start_face_recognition():
                         flag += 1
                         if flag%20==0:
                             requests.post('http://127.0.0.1:7000/send_sms')
+                        if flag%20==0:
+                            requests.post('http://127.0.0.1:7000/send_to_emergencycontacts')
+                        if flag%20==0:
+                            requests.post('http://127.0.0.1:7000/send_sms_to_emergencycontacts')
                         print("World")
                         intruder_detected = True  # Set intruder flag to prevent further captures
         cv2.imshow('Video', frame)
@@ -317,6 +321,8 @@ def send_to_auth():
     print("Email sent successfully!")
     return jsonify({"message": "Email sent successfully"}), 200
 
+
+
 @app.route('/send_sms', methods = ['GET','POST'])
 def send_message():
     account_sid = 'AC108ea743fcf1a93154a057452af67e27'
@@ -336,6 +342,114 @@ def send_message():
         except Exception as e:
             print("Failed to send SMS:", str(e))
     send_sms('+919167340521', 'Intrusion detected at your home!')
+
+
+
+@app.route('/send_to_emergencycontacts', methods = ['POST','GET'])
+def send_to_emergencycontacts():        
+    # Email credentials and recipient
+    email_sender = 'maxfurry3009@gmail.com'
+    email_password = 'ixwx wnax livu utbh'  # Insert your email password here
+    email_receiver = 'mahesh.patil@spit.ac.in'
+
+    subject = 'ALERT !! Intruder Detected'
+    emergency_contacts = collection_emergencycontacts.find({}, {'name': 1, 'email': 1, '_id': 0})
+    # URL where the Base64-encoded image is located
+    base64_image_url = 'http://localhost:5000/getLatestIntruderImage'  # Replace with the actual URL
+
+    for contact in emergency_contacts:
+        contact_name = contact['name']
+        contact_email = contact['email']
+        send_email_to_contact(contact_email)
+
+    def send_email_to_contact(email_receiver):
+        # Function to fetch the Base64-encoded image using requests
+        def get_base64_image_data(base64_image_url):
+            response = requests.get(base64_image_url)
+            return response.json()[0]['intruder_image_base64']  # Extract the Base64-encoded image
+
+        # Get the image data
+        image_data = get_base64_image_data(base64_image_url)
+
+        # Create the email message
+        msg = MIMEMultipart()
+        msg['From'] = email_sender
+        msg['To'] = email_receiver
+        msg['Subject'] = subject
+
+        # Function to attach image with MIME subtype based on Pillow
+        def attach_image_with_subtype(msg, image_data):
+            image = Image.open(BytesIO(base64.b64decode(image_data)))
+            image_type = image.format.lower()
+            
+            if image_type in ['jpeg', 'jpg']:
+                image_subtype = 'jpeg'
+            elif image_type == 'png':
+                image_subtype = 'png'
+            else:
+                print("Warning: Unsupported image format")
+                return
+
+            image_data = base64.b64decode(image_data)
+            image = MIMEImage(image_data, subtype=image_subtype)
+            image.add_header('Content-ID', '<image_cid>')
+            msg.attach(image)
+
+        # Attach the fetched image to the email
+        attach_image_with_subtype(msg, image_data)
+
+        # Update HTML body to use attached image
+        html_body = f"""
+        <!DOCTYPE html>
+        <html>
+        <body>
+        <h1>ALERT !! Intruder Detected </h1>
+        <h3>Location: ATHARVA COLLEGE OF ENGINEERING, MALAD</h3>
+        <p>Here is the image of the suspect</p><br>
+        <img src="cid:image_cid" alt="Fetched Image">
+        </html>
+        """
+
+        msg.attach(MIMEText(html_body, 'html'))
+
+        # Send the email
+        context = ssl.create_default_context()
+
+        with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
+            smtp.login(email_sender, email_password)
+            smtp.sendmail(email_sender, email_receiver, msg.as_string())
+
+        print("Email sent successfully!")
+        return jsonify({"message": "Email sent successfully"}), 200
+
+
+@app.route('/send_sms_to_emergencycontacts', methods = ['GET','POST'])
+def send_message_to_emergencycontacts():
+    account_sid = 'AC108ea743fcf1a93154a057452af67e27'
+    auth_token = '69ee464f0fdc75098208155e56059afd'
+
+    # Fetch emergency contacts from MongoDB
+    emergency_contacts = collection_emergencycontacts.find({}, {'name': 1, 'contactNumber': 1, '_id': 0})
+
+    # Initialize Twilio Client
+    client = Client(account_sid, auth_token)
+    for contact in emergency_contacts:
+        contact_name = contact['name']
+        contact_number = contact['contact']
+        send_sms(contact_number, f"Intrusion detected! Please check your email for more details.")
+
+    def send_sms(to, body):
+        try:
+            message = client.messages.create(
+                body=body,
+                from_='+15513138117',
+                to=to
+            )
+            print("SMS sent successfully with SID:", message.sid)
+        except Exception as e:
+            print("Failed to send SMS:", str(e))
+    send_sms('+919167340521', 'Intrusion detected at your home!')
+
 
 @app.route('/fetch_intruders', methods=['GET'])
 def fetch_intruders():
