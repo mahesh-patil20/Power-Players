@@ -1,0 +1,272 @@
+.mainFooter123{
+    background-color: rgb(32, 33, 36);
+    text-align: center;
+    font-size: 1.05rem;
+    font-weight: normal;
+    padding: 2em 0.5em 0 0.5em;
+    color: white;
+}
+.footerimg{
+    width: 100%;
+    pointer-events: none;
+    /* border: 2px solid black; */
+    height: 100%;
+}
+.Rights{
+    /* border: 2px solid black; */
+    line-height:40%;
+    padding: 0.5em;
+}
+
+#footlink123{
+    color: white;
+}
+
+
+.icon123{
+    max-width: 100%;
+}
+
+
+.address123{
+    /* border: 2px solid black;  */
+    width: 100%;
+    text-align: center;
+}
+.contactDetails123{
+    /* border: 2px solid black; */
+    text-align: center;
+    width: 100%;
+    margin-bottom: 1.5em;
+}
+.contactemail123{
+    /* border: 2px solid hotpink; */
+    display: flex;
+    text-align: left;
+    /* padding: 0.5em 1em; */
+    align-items:center;
+    width: min-content;
+    margin: 0 auto;
+}
+.contactemail123 div{
+    display: flex;
+    /* border: 2px solid green; */
+    height: 35px;
+    align-items: center;
+    justify-content: center;
+    justify-items: center;
+    padding-right: 0.3em;
+}
+.contactemail123 div a{
+    /* border: 2px solid red; */
+    padding: 0;
+    height: min-content;
+    padding-bottom: 0.2em;
+}
+.fullAddress123{
+    /* border: 2px solid hotpink; */
+    width: 90%;
+    padding: 0 1em;
+    text-align: center;
+    margin: 0 auto;
+    margin-bottom: 1.5em;
+
+}
+.implinks123{
+    /* border: 2px solid blanchedalmond; */
+    text-align: center;
+    width: 70%;
+    /* color: rgb(51, 51, 51); */
+    color: white;
+    margin: 0 auto;
+    margin-bottom: 1em;
+}
+.implinks123 ul{
+    /* border: 2px solid green; */
+    padding: 0 1em;
+    color: white;
+}
+.implinks123 ul li{
+    /* border: 2px solid red; */
+    list-style: none;
+    padding: 0em ;
+    /* color: rgb(51, 51, 51); */
+    color: white;
+    width: max-content;
+    margin: 0 auto;
+}
+
+.linkshead123{
+    /* border: 2px solid hotpink; */
+    padding: 0.5em 1em;
+}
+
+.contact1123{
+    /* border: 2px solid red; */
+    padding: 0.5em 1em;
+}
+.blocks123{
+    /* border: 2px solid red; */
+    display: flex;
+    /* width: 100%; */
+    align-items: top;
+    padding: 1em;
+    flex-direction: column;
+}
+.block1123{
+    /* border: 2px solid green; */
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: column;
+    width: 100%;
+    margin: 0 auto;
+}
+
+/* .block2links{ */
+    /* border: 2px solid red; */
+/* } */
+.footerbelow123{
+    display: flex;
+    /* border: 2px solid green; */
+    background-color: rgb(32, 33, 36);
+    /* width: 100%; */
+    text-align: center;
+    padding: 0em 0.5em;
+    color: white;
+    font-size: 0.7rem;
+    height: 33px;
+    font-weight: 500;
+    align-items: center; 
+}
+.footerbelowinside123{
+    /* border: 2px solid violet; */
+    padding: 0 1.5em;
+    display: flex;
+    align-items: center;
+    margin: 0 auto;
+}
+
+.iamemail123{
+    color: white;
+}
+@media only screen and (min-width: 1000px) {
+    .tab1123{
+        /* border: 2px solid red; */
+        display: flex;
+        width: 100%;
+    }
+    .address123{
+        /* border: 2px solid black; */
+        padding: 0.5em 0;
+        width: 50%;
+        text-align: left;
+    }
+    
+    .contactDetails123{
+        /* border: 2px solid black; */
+        text-align: left;
+        width: 30%;
+    }
+    .fullAddress123{
+        /* border: 2px solid hotpink; */
+        width: 70%;
+        padding: 0 1em;
+        text-align: left;
+        margin: 0;
+    }
+    .implinks123{
+        /* border: 2px solid red; */
+        text-align: left;
+        width: 33%;
+        /* color: rgb(51, 51, 51); */
+        color: white;
+    }
+    .implinks123 ul{
+        /* border: 2px solid green; */
+        padding: 0 1em;
+        color: white;
+    }
+    .implinks123 ul li{
+        /* border: 2px solid red; */
+        list-style: none;
+        padding: 0em;
+        /* color: rgb(51, 51, 51); */
+        color: white;
+        width: max-content;
+        margin: 0;
+    }
+    .linkshead123{
+        /* border: 2px solid hotpink; */
+        padding: 0.5em 1em;
+    }
+    .block2head{
+        /* border: 2px solid red; */
+        padding: 0.5em 1em;
+    }
+    .contact1123{
+        /* border: 2px solid red; */
+        padding: 0.5em 0em;
+    }
+    .contactemail123{
+        /* border: 2px solid hotpink; */
+        display: flex;
+        text-align: left;
+        /* padding: 0.5em 1em; */
+        align-items:center;
+        width: 100%;
+    }
+    .contactemail123 div{
+        display: flex;
+        /* border: 2px solid green; */
+        height: 35px;
+        align-items: center;
+        justify-content: center;
+        justify-items: center;
+        padding-right: 0.3em;
+    }
+    .contactemail123 div a{
+        /* border: 2px solid red; */
+        padding: 0;
+        height: min-content;
+        padding-bottom: 0.2em;
+    }
+    .blocks123{
+        /* border: 2px solid red; */
+        display: flex;
+        /* width: 100%; */
+        align-items: top;
+        padding: 2em 5em;
+        flex-direction: row;
+    }
+    .block1123{
+        /* border: 2px solid green; */
+        display: flex;
+        justify-content: space-between;
+        width: 90%;
+        margin: 0 auto;
+        flex-direction: row;
+    }
+    /* .block2links{ */
+        /* border: 2px solid red; */
+    /* } */
+    .footerbelow123{
+        display: flex;
+        /* border: 2px solid green; */
+        background-color: rgb(32, 33, 36);
+        /* width: 100%; */
+        text-align: center;
+        padding: 0em 0.5em;
+        color: white;
+        font-size: 0.9rem;
+        height: 33px;
+        font-weight: 500;
+        align-items: center; 
+    }
+    .footerbelowinside123{
+        /* border: 2px solid violet; */
+        padding: 0 1.5em;
+        display: flex;
+        align-items: center;
+        margin: 0 auto;
+    }
+}

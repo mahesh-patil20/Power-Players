@@ -1,0 +1,116 @@
+
+.login_container {
+    width: 100%;
+    height: 85vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #0d1117;
+}
+
+.login_main {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background-color: #30363d;
+    max-height: 450px;
+    width: 400px;
+    overflow: hidden;
+    border-radius: 12px;
+    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;;
+}
+
+.login_form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 35px;
+}
+
+/*checkbox to switch from sign up to login*/
+
+#login_chk {
+    display: none;
+}
+
+/*Login*/
+
+.login_login {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.login_login label {
+    margin: 5% 0 5%;
+}
+
+.login_label {
+    color: #fff;
+    font-size: 2rem;
+    justify-content: center;
+    display: flex;
+    font-weight: bold;
+    cursor: pointer;
+    transition: .5s ease-in-out;
+}
+
+.login_input {
+    width: 100%;
+    height: 40px;
+    font-size: 1rem;
+    background: #e0dede;
+    padding: 10px;
+    margin-top: 15px;
+    border: none;
+    outline: none;
+    border-radius: 4px;
+    color: #0d1117;
+}
+
+/*Register*/
+
+.login_register {
+    background: #eee;
+    border-radius: 60% / 10%;
+    transition: .8s ease-in-out;
+}
+
+.login_register label {
+    color: #296237;
+    transform: scale(.6);
+}
+
+#login_chk:checked ~ .login_register {
+    transform: translateY(-68%);
+}
+
+#login_chk:checked ~ .login_register label {
+    transform: scale(1);
+    margin-bottom: .5rem;
+}
+
+#login_chk:checked ~ .login_login label {
+    transform: scale(.6);
+}   
+
+/*Button*/
+
+.login_form button {
+    width: 30%;
+    height: 40px;
+    margin: 15px auto 10%;
+    color: #0d1117;
+    background: rgb(224, 222, 222);
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: .2s ease-in;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+}
+
+.login_form button:hover {
+    background-color: #67e5fc;
+}

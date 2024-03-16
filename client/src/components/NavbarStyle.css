@@ -1,0 +1,367 @@
+body {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+  font-family: "Bungee Spice", cursive;
+  font-family: "Poppins", sans-serif;
+  font: "Poppins";
+  background-color: #0d1117;
+  /* font-size: 0.5rem; */
+}
+html {
+  /* border: 10px solid black; */
+  padding: 0px;
+  margin: 0px;
+  box-sizing: border-box;
+  /* height: 100%; */
+}
+
+.container {
+  padding: 0em 1.5em;
+  margin: 0px 0px;
+  /* border: 2px solid red; */
+}
+
+a {
+  /* color: aqua; */
+  text-decoration: none;
+}
+.hero {
+  /* border: 2px solid red; */
+  display: flex;
+  position: sticky;
+  background-color: rgba(255, 255, 255, 0.96);
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  /* left: 0px; */
+  z-index: 100;
+  box-shadow: 0 0 5px #878181;
+  align-items: center;
+  padding: 0.5em 1em;
+  justify-content: space-between;
+}
+.itemlist {
+  /* border: 2px solid red; */
+  /* width: 50%; */
+  display: none;
+}
+.List {
+  /* border: 2px solid green; */
+  min-width: 100%;
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  justify-content: space-around;
+  align-items: right;
+  text-align: center;
+  padding: 0px;
+}
+
+.listItem {
+  /* border: 2px solid red; */
+  font-size: 1rem;
+  align-items: center;
+  text-decoration: none;
+  padding: 0.5em 0;
+}
+/* .listItem:hover{
+    scale: 1.1;
+    transition: all 0.3s;
+} */
+/* .listItem:after {    
+    background: none repeat scroll 0 0 transparent;
+    bottom: 0;
+    content: "";
+    display: block;
+    height: 2px;
+    left: 50%;
+    position: relative;
+    background: rgb(0, 175, 239);
+    transition: width 0.3s ease 0s, left 0.3s ease 0s;
+    width: 0;
+  }
+.listItem:hover:after { 
+    width: 100%; 
+    left: 0; 
+  } */
+.logo {
+  /* border: 2px solid red; */
+  max-height: 100%;
+  max-width: 100%;
+  padding: 0em;
+}
+.logo1 {
+  /* max-width: 65%;
+    min-height: 100%; */
+  width: 200px;
+}
+.login {
+  color: #545e6f;
+  /* text-decoration:solid dotted; */
+  font-weight: 500;
+}
+.inmobileview {
+  /* border: 2px solid red; */
+  background-color: rgba(255, 255, 255, 0.96);
+  position: absolute;
+  top: 85px;
+  left: 0px;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 1em 0.5em;
+  text-align: center;
+  /* box-shadow: 0 0 5px #878181; */
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+    rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+}
+.hamburger-menu {
+  /* border: 2px solid red; */
+  padding: 0.5em;
+}
+.hamburgerlines {
+  /* border: 2px solid blue; */
+  width: 30px;
+  height: 30px;
+  color: #545e6f;
+}
+.uppernav {
+  /* border: 2px solid green; */
+  display: flex;
+  background-color: rgb(0, 175, 239);
+  position: fixed;
+  top: 0px;
+  width: 100vw;
+  /* left: 0px; */
+  z-index: 101;
+  justify-content: space-between;
+  padding: 0em 0.5em;
+  color: white;
+  font-size: 0.5em;
+  height: 30px;
+  font-weight: 500;
+}
+.uppernav a {
+  color: white;
+  /* border: 2px solid green; */
+  padding: 0 0.5em;
+}
+.uppernavleft {
+  /* border: 2px solid black; */
+  display: flex;
+  width: 30%;
+}
+.uppernavright {
+  /* border: 2px solid violet;SS */
+  padding: 0 1em;
+  display: flex;
+  align-items: center;
+}
+.navemail {
+  /* border: 2px solid bisque; */
+  padding: 0em 0.5em;
+  display: flex;
+  align-items: center;
+}
+.navcall {
+  /* border: 2px solid red; */
+  padding: 0em 0.5em;
+  display: flex;
+  align-items: center;
+}
+.navcall div,
+.navemail div {
+  display: flex;
+  /* border: 2px solid green; */
+  height: 100%;
+  align-items: center;
+}
+@media (min-width: 700px) {
+  .List {
+    width: 50%;
+  }
+  .itemlist {
+    display: none;
+  }
+  /* .listItem:after {    
+        background: none repeat scroll 0 0 transparent;
+        bottom: 0;
+        content: "";
+        display: block;
+        height: 2px;
+        left: 50%;
+        position: relative;
+        background: rgb(0, 175, 239);
+        transition: width 0.3s ease 0s, left 0.3s ease 0s;
+        width: 0;
+      }
+    .listItem:hover:after { 
+        width: 100%; 
+        left: 0; 
+      } */
+  .inmobileview {
+    /* border: 2px solid red; */
+    background-color: rgba(255, 255, 255, 0.96);
+    /* background-color: rgba(233, 41, 41, 0.96); */
+    position: absolute;
+    top: 75px;
+    left: 0px;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 1em 0.5em;
+    text-align: center;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+      rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+  }
+  .uppernav {
+    /* border: 2px solid green; */
+    display: flex;
+    background-color: rgb(0, 175, 239);
+    position: fixed;
+    top: 0px;
+    width: 100vw;
+    /* left: 0px; */
+    z-index: 101;
+    justify-content: space-between;
+    padding: 0em 0.5em;
+    color: white;
+    font-size: 0.9rem;
+    height: 30px;
+    font-weight: 500;
+  }
+  .uppernav a {
+    color: white;
+    /* border: 2px solid green; */
+    padding: 0 0.5em;
+  }
+  .uppernavleft {
+    /* border: 2px solid black; */
+    display: flex;
+    width: 30%;
+  }
+  .uppernavright {
+    /* border: 2px solid violet; */
+    padding: 0 1em;
+    display: flex;
+    align-items: center;
+  }
+  .navemail {
+    /* border: 2px solid bisque; */
+    padding: 0em 1em;
+    display: flex;
+    align-items: center;
+  }
+  .navcall {
+    /* border: 2px solid red; */
+    padding: 0em 1em;
+    display: flex;
+    align-items: center;
+  }
+  .logo1 {
+    /* max-width: 35%; */
+    width: 200px;
+  }
+}
+@media (min-width: 1000px) {
+  .List {
+    /* border: 2px solid black; */
+    width: 30%;
+    flex-direction: row;
+    position: relative;
+    top: 10px;
+  }
+  .itemlist {
+    /* border: 2px solid red; */
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+  #adminnavlist {
+    border: 3px solid black;
+  }
+
+  .listItem {
+    /* border: 2px solid red; */
+  }
+  .listItem:after {
+    background: none repeat scroll 0 0 transparent;
+    bottom: 0;
+    content: "";
+    display: block;
+    height: 3px;
+    left: 50%;
+    position: relative;
+    background: #67e5fc;
+    transition: width 0.3s ease 0s, left 0.3s ease 0s;
+    width: 0;
+    top: 5px;
+  }
+  .listItem:hover:after {
+    width: 100%;
+    left: 0;
+  }
+  .hamburger-menu {
+    display: none;
+  }
+  .inmobileview {
+    display: none;
+  }
+  .logo {
+    /* border: 2px solid red; */
+    height: 100%;
+    width: 100%;
+    padding: 0 0.5em;
+  }
+  .logo1 {
+    /* max-width: 35%; */
+    width: 250px;
+  }
+  .uppernav {
+    /* border: 2px solid green; */
+    display: flex;
+    background-color: rgb(0, 175, 239);
+    position: fixed;
+    top: 0px;
+    width: 100vw;
+    /* left: 0px; */
+    z-index: 101;
+    justify-content: space-between;
+    padding: 0em 0.5em;
+    color: white;
+    font-size: 0.9rem;
+    height: 30px;
+    font-weight: 500;
+  }
+  .uppernav a {
+    color: white;
+    /* border: 2px solid green; */
+    padding: 0 0.5em;
+  }
+  .uppernavleft {
+    /* border: 2px solid black; */
+    display: flex;
+    width: 30%;
+  }
+  .uppernavright {
+    /* border: 2px solid violet; */
+    padding: 0 1.5em;
+    display: flex;
+    align-items: center;
+  }
+  .navemail {
+    /* border: 2px solid bisque; */
+    padding: 0em 1em;
+    display: flex;
+    align-items: center;
+  }
+  .navcall {
+    /* border: 2px solid red; */
+    padding: 0em 1em;
+    display: flex;
+    align-items: center;
+  }
+}
