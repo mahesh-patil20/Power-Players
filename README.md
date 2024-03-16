@@ -1,1 +1,1 @@
-# ACE-Hackathon
+# ACE-Hackathon - Power Players
