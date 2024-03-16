@@ -36,5 +36,3 @@ def is_camera_covered(video_capture):
     # Release the camera
     video_capture.release()
     cv2.destroyAllWindows()
-
-is_camera_covered()

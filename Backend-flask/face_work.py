@@ -14,7 +14,7 @@ import requests
 from pymongo import MongoClient
 from dotenv import load_dotenv
 import base64
-from black_screen import is_camera_covered
+import black_screen
 from keras.models import model_from_json
 from PIL import Image
 from io import BytesIO
@@ -81,6 +81,7 @@ def start_face_recognition():
     global face_recognition_active, video_capture, stop_thread, intruder_detected
     intruder_detected = False
     video_capture = cv2.VideoCapture(0)
+    flag = 1
     while True:
         if stop_thread:
             video_capture.release()
@@ -90,7 +91,7 @@ def start_face_recognition():
             continue
         
         # Check if the camera is covered before proceeding with face recognition
-        if is_camera_covered(video_capture):
+        if black_screen.is_camera_covered(video_capture):
             print("Camera is covered. Face recognition cannot proceed.")
             continue  # Skip face recognition if the camera is covered
         
