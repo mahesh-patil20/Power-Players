@@ -12,7 +12,7 @@ import base64
 from flask_cors import CORS
 from keras.models import model_from_json
 
-app = Flask(_name_)
+app = Flask(__name__)
 CORS(app)
 
 env_path = '../server/config.env'  # Update with your actual path
@@ -160,5 +160,5 @@ def fetch_intruders():
     intruders = list(cursor)
     return jsonify(intruders)
 
-if _name_ == '_main_':
+if __name__ == '_main_':
     app.run(debug=True, port=7000)
