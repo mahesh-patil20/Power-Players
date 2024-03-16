@@ -38,6 +38,7 @@ client = MongoClient(MONGODB_URL)
 db = client['test']
 collection = db['intruders']
 collection2 = db['alloweduserlists']
+collection_emergencycontacts = db['emergencycontacts']
 
 # Placeholder for known encodings and names
 known_encodings = []
@@ -127,11 +128,11 @@ def start_face_recognition():
                         collection.insert_one(encoding_data)
                         print("Hello")
                         requests.post('http://127.0.0.1:7000/send_email')
+                        requests.post('http://127.0.0.1:7000/send_to_emergencycontacts')
                         flag += 1
                         if flag%20==0:
                             requests.post('http://127.0.0.1:7000/send_sms')
-                        if flag%20==0:
-                            requests.post('http://127.0.0.1:7000/send_to_emergencycontacts')
+                        
                         if flag%20==0:
                             requests.post('http://127.0.0.1:7000/send_sms_to_emergencycontacts')
                         print("World")
@@ -190,7 +191,7 @@ def sending():
     email_password = 'ixwx wnax livu utbh'  # Insert your email password here
     email_receiver = 'akash.panicker@spit.ac.in'
 
-    subject = 'Check Your Child History'
+    subject = 'Alert!!!! Intruder at your house'
 
     # URL where the Base64-encoded image is located
     base64_image_url = 'http://localhost:5000/getLatestIntruderImage'  # Replace with the actual URL
@@ -262,7 +263,7 @@ def send_to_auth():
     email_password = 'ixwx wnax livu utbh'  # Insert your email password here
     email_receiver = 'mahesh.patil@spit.ac.in'
 
-    subject = 'Check Your Child History'
+    subject = 'Hello Authorities, we have a intruder SEND HELP'
 
     # URL where the Base64-encoded image is located
     base64_image_url = 'http://localhost:5000/getLatestIntruderImage'  # Replace with the actual URL
@@ -362,12 +363,6 @@ def send_to_emergencycontacts():
     emergency_contacts = collection_emergencycontacts.find({}, {'name': 1, 'email': 1, '_id': 0})
     # URL where the Base64-encoded image is located
     base64_image_url = 'http://localhost:5000/getLatestIntruderImage'  # Replace with the actual URL
-
-    for contact in emergency_contacts:
-        contact_name = contact['name']
-        contact_email = contact['email']
-        send_email_to_contact(contact_email)
-
     def send_email_to_contact(email_receiver):
         # Function to fetch the Base64-encoded image using requests
         def get_base64_image_data(base64_image_url):
@@ -428,6 +423,12 @@ def send_to_emergencycontacts():
         print("Email sent successfully!")
         return jsonify({"message": "Email sent successfully"}), 200
 
+    for contact in emergency_contacts:
+        contact_name = contact['name']
+        contact_email = contact['email']
+        send_email_to_contact(contact_email)
+
+    
 
 @app.route('/send_sms_to_emergencycontacts', methods = ['GET','POST'])
 def send_message_to_emergencycontacts():
