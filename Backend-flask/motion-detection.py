@@ -21,7 +21,7 @@ def motionDetection():
         for contour in contours:
             x, y, w, h = cv2.boundingRect(contour)
             area = cv2.contourArea(contour)
-            if area < 30000 and w > 1000 or h > 1000 or magnitude < 200 :  # Adjust these parameters as needed
+            if area > 30000 and w > 10000 and h > 10000 and magnitude < 200 :  # Adjust these parameters as needed
                 continue
             cv2.rectangle(frame1, (x, y), (x+w, y+h), (0, 255, 0), 2)
             cv2.putText(frame1, "STATUS: {}".format('MOTION DETECTED'), (10, 60), cv2.FONT_HERSHEY_SIMPLEX,
