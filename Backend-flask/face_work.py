@@ -10,7 +10,7 @@ import requests
 from pymongo import MongoClient
 from dotenv import load_dotenv
 import base64
-
+from black_screen import is_camera_covered
 app = Flask(__name__)
 
 env_path = '../server/config.env'  # Update with your actual path
@@ -51,6 +51,7 @@ def start_face_recognition():
     global face_recognition_active, video_capture, stop_thread, intruder_detected
     intruder_detected = False
     video_capture = cv2.VideoCapture(0)
+    
     while True:
         if stop_thread:
             video_capture.release()
@@ -58,6 +59,11 @@ def start_face_recognition():
         if not face_recognition_active:
             time.sleep(0.1)
             continue
+        
+        # Check if the camera is covered before proceeding with face recognition
+        if is_camera_covered():
+            print("Camera is covered. Face recognition cannot proceed.")
+            continue  # Skip face recognition if the camera is covered
         
         ret, frame = video_capture.read()
         face_locations = face_recognition.face_locations(frame)
@@ -90,6 +96,8 @@ def start_face_recognition():
         cv2.imshow('Video', frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
+
+
 
 def stop_face_recognition():
     global face_recognition_active, stop_thread
