@@ -9,7 +9,7 @@ import cv2
 from pymongo import MongoClient
 from dotenv import load_dotenv
 import base64
-
+from black_screen import is_camera_covered
 app = Flask(__name__)
 CORS(app)
 
