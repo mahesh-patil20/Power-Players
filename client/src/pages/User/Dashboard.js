@@ -69,6 +69,19 @@ const UserHome = () => {
 
 
   useEffect(() => {
+    axios.post('http://localhost:5000/setalarmstatus', {
+      status: checked2
+    }).then(response => {
+      // console.log(response.data);
+    }).catch(error => {
+      console.error('Error setting alarm status:', error);
+    });
+
+    
+  }, [checked2]);
+
+
+  useEffect(() => {
     axios.get('http://localhost:5000/getLatestIntruderImage')
       .then(response => {
        console.log(response.data);
