@@ -168,6 +168,7 @@ def start_face_recognition():
     intruder_detected = False
     video_capture = cv2.VideoCapture(0)
     flag = 1
+    flgg = 0
     while True:
         if stop_thread:
             video_capture.release()
@@ -176,10 +177,14 @@ def start_face_recognition():
             time.sleep(0.1)
             continue
         
-        # Check if the camera is covered before proceeding with face recognition
         if black_screen.is_camera_covered(video_capture):
+            flgg+=1
             print("Camera is covered. Face recognition cannot proceed.")
-            continue  # Skip face recognition if the camera is covered
+            if flgg%20 == 0:
+                requests.post('http://127.0.0.1:7000/send_email_for_black_screen')
+            continue 
+
+ # Skip face recognition if the camera is covered
         
         detect_objects_in_realtime_weapon()
 
@@ -335,6 +340,58 @@ def sending():
     <img src="cid:image_cid" alt="Fetched Image">
     <h3>Click Yes, If you want to send help request to Emergency Services</h3>
     <a href="http://localhost:7000/send_to_authority" style="background-color: gray; color: white; padding: 10px 20px; text-decoration: none; display: inline-block;">Yes</a>
+    </body>
+    </html>
+    """
+
+    msg.attach(MIMEText(html_body, 'html'))
+
+    # Send the email
+    context = ssl.create_default_context()
+
+    with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
+        smtp.login(email_sender, email_password)
+        smtp.sendmail(email_sender, email_receiver, msg.as_string())
+    print("Email sent successfully!")
+    return jsonify({"message": "Email sent successfully"}), 200
+
+
+@app.route('/send_email_for_black_screen', methods = ['GET','POST'])
+def sending_black():
+    # Email credentials and recipient
+    # FINAL WORKING AUTOMATED EMAIL SYSTEM FOR INTRUDER DETECTION
+# Email credentials and recipient
+    email_sender = 'maxfurry3009@gmail.com'
+    email_password = 'ixwx wnax livu utbh'  # Insert your email password here
+    email_receiver = 'akash.panicker@spit.ac.in'
+
+    subject = 'Alert!!!! Intruder blocked your cameras.'
+
+    # URL where the Base64-encoded image is located
+    # base64_image_url = 'http://localhost:5000/getLatestIntruderImage'  # Replace with the actual URL
+
+    # Function to fetch the Base64-encoded image using requests
+    # def get_base64_image_data(base64_image_url):
+    #     response = requests.get(base64_image_url)
+    #     return response.json()[0]['intruder_image_base64']  # Extract the Base64-encoded image
+
+    # Get the image data
+    # image_data = get_base64_image_data(base64_image_url)
+
+    # Create the email message
+    msg = MIMEMultipart()
+    msg['From'] = email_sender
+    msg['To'] = email_receiver
+    msg['Subject'] = subject
+
+
+    # Update HTML body to use attached image
+    html_body = f"""
+    <!DOCTYPE html>
+    <html>
+    <body>
+    <h1>ALERT !! Intruder Detected, He has blocked your cameras </h1>
+    <h3>Location: ATHARVA COLLEGE OF ENGINEERING, MALAD</h3>
     </body>
     </html>
     """
