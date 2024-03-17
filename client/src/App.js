@@ -55,18 +55,24 @@ function App() {
   }, []);
   return (
     <>
-      <ToastContainer />
+      <ToastContainer
+position="top-right"
+autoClose={5000}
+hideProgressBar={false}
+newestOnTop={false}
+closeOnClick
+rtl={false}
+pauseOnFocusLoss={false}
+draggable
+pauseOnHover
+theme="dark"
+/>
       {role === "visitor" && (
         <>
-          <Navbar details={{ role, setRole }} />
+          {/* <Navbar details={{ role, setRole }} /> */}
           <Routes>
-            <Route exact path="/" element={<Home />} />
-            <Route exact path="/home" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route
-              path="/login"
-              element={<Login details={{ role : "user", setRole }} />}
-            />
+            <Route exact path="/" element={<Login details={{ role : "user", setRole }} />} />
+
             <Route path="*" element={<NotFound />} />
           </Routes>
         </>

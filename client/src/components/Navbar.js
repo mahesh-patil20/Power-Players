@@ -59,7 +59,7 @@ const Navbar = (props) => {
         <div className={showMediaIcons ? "inmobileview itemlist" : "itemlist"}>
           <ul className='List'>
 
-            <NavLink to="/"
+            {/* <NavLink to="/"
               style={({ isActive }) => ({
                 color: isActive ? '#158344' : '#545e6f',
                 textDecoration: 'none',
@@ -98,7 +98,7 @@ const Navbar = (props) => {
                   marginLeft: window.innerWidth <= 768 ? "10px" : "0px",
                 }}>About Us</li>
               </div>
-            </NavLink>
+            </NavLink> */}
             <NavLink to="/login"
               style={({ isActive }) => ({
                 color: isActive ? '#158344' : '#545e6f',

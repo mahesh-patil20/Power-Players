@@ -24,6 +24,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+// import { faVideo } from '@fortawesome/free-solid-svg-icons';
+// import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import "./NavbarStyle.css";
 const Navbar2 = (props) => {
   const { role, setRole } = props.details;
@@ -53,7 +55,7 @@ const Navbar2 = (props) => {
         localStorage.removeItem("email");
         localStorage.setItem("role", "visitor");
         setRole("visitor");
-        navigate("/");
+        window.location.href = "/";
       } catch (error) {
         if (error.response) {
           toast.error(error.response.data.error);
@@ -117,7 +119,8 @@ const Navbar2 = (props) => {
                 flexDirection: window.innerWidth <= 768 ? "row" : "column",
                 alignItems: "center",
               }}>
-                <FontAwesomeIcon icon={faHome} />
+                {/* <FontAwesomeIcon icon={faHome} /> */}
+                <FontAwesomeIcon icon={faVideo} />
                 <li className='listItem' onClick={() => setShowMediaIcons(false)} style={{
                   fontWeight: '600',
                   marginLeft: window.innerWidth <= 768 ? "10px" : "0px",
@@ -137,7 +140,9 @@ const Navbar2 = (props) => {
                 flexDirection: window.innerWidth <= 768 ? "row" : "column",
                 alignItems: "center",
               }}>
-                <FontAwesomeIcon icon={faHome} />
+                {/* <FontAwesomeIcon icon={faHome} /> */}
+                {/* <MailOutlineIcon /> */}
+                <MailOutlineIcon style={{ fontSize: 17 }} />
                 <li className='listItem' onClick={() => setShowMediaIcons(false)} style={{
                   fontWeight: '600',
                   marginLeft: window.innerWidth <= 768 ? "10px" : "0px",

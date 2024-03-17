@@ -326,6 +326,12 @@ const UserHome = () => {
              fontWeight: "bold",
              textAlign: "center",  
           }}>Time</TableCell>
+                <TableCell   style={{
+             color: "white", 
+             textDecoration: "underline",
+             fontWeight: "bold",
+             textAlign: "center",  
+          }}>Emotion</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -344,6 +350,10 @@ const UserHome = () => {
                     color: "white",
                     textAlign: "center", 
                   }}>{intruder.timestamp}</TableCell>
+                  <TableCell style={{
+                    color: "white",
+                    textAlign: "center", 
+                  }}>{intruder.emotion}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
