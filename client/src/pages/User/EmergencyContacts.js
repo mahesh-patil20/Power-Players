@@ -80,6 +80,7 @@ const EmergencyContacts = () => {
 
 
   useEffect(() => {
+    document.title = "Emergency Contacts";
     async function fetchEmergencyContacts() {
       try {
         const response = await axios.get(
@@ -91,6 +92,7 @@ const EmergencyContacts = () => {
       }
     }
     fetchEmergencyContacts();
+
   }, []);
 
 

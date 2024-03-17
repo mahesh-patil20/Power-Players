@@ -22,6 +22,8 @@ import Button from '@mui/material/Button';
 
 const UserHome = () => {
   const [checked, setChecked] = useState(false);
+  const [checked2, setChecked2] = useState(false);
+
   const [allowedUsers, setAllowedUsers] = useState([]);
   const [intruders, setIntruders] = useState([]);
 
@@ -50,12 +52,18 @@ const UserHome = () => {
         });
     }
   };
+  const handleChange2 = () => {
+    const newValue2 = !checked2;
+    setChecked2(newValue2);
+    localStorage.setItem('systemAlarm', newValue2); // Store the value in local storage
+  };
 
   useEffect(() => {
     fetchAllowedUsers();
     fetchIntruders();
 
     localStorage.setItem('systemSecurity', false); // Store the value in local storage
+    localStorage.setItem('systemAlarm', false); // Store the value in local storage
     // SendEmail('2021-10-10 10:10:10', 'image');
   }, []);
 
@@ -119,6 +127,8 @@ const UserHome = () => {
 
 
   useEffect(() => {
+    
+    document.title = "Dashboard";
     const intruderAddedListener = () => {
       fetchIntruders();
     };
@@ -128,6 +138,7 @@ const UserHome = () => {
     return () => {
       window.removeEventListener('intruderAdded', intruderAddedListener);
     };
+
   }, []);
 
   // Function to convert Base64 to Blob
@@ -226,6 +237,52 @@ const UserHome = () => {
         </div>
         </div>
       </div>
+      <div style={{
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        flexDirection: 'column',
+      }}>
+        <div style={{
+          textAlign: 'center',
+        }}>
+        System Alarm Status
+      </div>
+      <div style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        flexDirection: 'row',
+      
+      }}>
+        <div>
+          OFF
+        </div>
+        <div>
+          {/* <AwesomeToggleSwitch checked={checked} onChange={handleChange} /> */}
+          <Switch
+      checked={checked2}
+      onChange={handleChange2}
+      color="primary"
+      sx={{
+        '& .MuiSwitch-switchBase.Mui-checked': {
+          color: '#00e676', // customize the color when the switch is on
+          '&:hover': {
+            backgroundColor: 'gray', // customize hover effect when switch is on
+          },
+        },
+        '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
+          backgroundColor: '#65e8fc', // customize the track color when the switch is on
+        },
+      }}
+    />
+        </div>
+        <div>
+          ON
+        </div>
+        </div>
+      </div>
       <div>
       <AddAllowedList />
       </div>
@@ -254,21 +311,25 @@ const UserHome = () => {
             color: "white", 
             textDecoration: "underline",
             fontWeight: "bold", 
+            backgroundColor: "#010409"
           }}>Image</TableCell>
                 <TableCell  style={{
              color: "white", 
              textDecoration: "underline",
              fontWeight: "bold", 
+             backgroundColor: "#010409"
           }}>Name</TableCell>
                 <TableCell  style={{
              color: "white", 
              textDecoration: "underline",
              fontWeight: "bold", 
+             backgroundColor: "#010409"
           }}>Contact No.</TableCell>
                 <TableCell  style={{
              color: "white", 
              textDecoration: "underline",
              fontWeight: "bold", 
+             backgroundColor: "#010409"
           }}>Action</TableCell> {/* Add this TableCell for delete action */}
               </TableRow>
             </TableHead>
@@ -299,7 +360,7 @@ const UserHome = () => {
       <div className="Table">
         <div>
         <h3 style={{
-          margin: "20px",
+          margin: "40px 20px 20px 20px",
           // border: "2px solid red",
           textAlign: "center",
         }}>INTRUDERS</h3>
@@ -319,18 +380,22 @@ const UserHome = () => {
              textDecoration: "underline",
              fontWeight: "bold",
              textAlign: "center", 
+             backgroundColor: "#010409"
           }}>Photo</TableCell>
                 <TableCell   style={{
              color: "white", 
              textDecoration: "underline",
              fontWeight: "bold",
-             textAlign: "center",  
+             textAlign: "center",
+
+             backgroundColor: "#010409"  
           }}>Time</TableCell>
                 <TableCell   style={{
              color: "white", 
              textDecoration: "underline",
              fontWeight: "bold",
-             textAlign: "center",  
+             textAlign: "center", 
+             backgroundColor: "#010409" 
           }}>Emotion</TableCell>
               </TableRow>
             </TableHead>

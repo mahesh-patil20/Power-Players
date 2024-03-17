@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import "../../css_files/login.css";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { useEffect } from "react";
 const {useNavigate} = require("react-router-dom");
 
 const Login = (props) => {
@@ -17,6 +18,10 @@ const Login = (props) => {
     password: ""
   });
 
+
+  useEffect(() => {
+    document.title = "Login";
+  }, []);
   const onLoginChange = (e) => {
     setLogin({ ...login, [e.target.name]: e.target.value });
   };
