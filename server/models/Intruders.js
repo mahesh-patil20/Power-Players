@@ -8,7 +8,10 @@ const intruderSchema = new mongoose.Schema({
   timestamp: {
     type: Date,
     default: Date.now
-  }
+  },
+  emotion: {
+    type: String,
+  },
 });
 
 const Intruders = mongoose.model('Intruder', intruderSchema);
