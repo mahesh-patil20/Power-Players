@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import Webcam from 'react-webcam';
 import { Button } from '@mui/material';
+import AlarmButton from './AlarmButton';
 const Live = () => {
   const webcamRef = React.useRef(null);
   const mediaRecorderRef = React.useRef(null);
@@ -9,6 +10,7 @@ const Live = () => {
   const [stream, setStream] = React.useState(null);
 
   useEffect(() => {
+    document.title = "Surveillance";
     localStorage.setItem('systemSecurity', false);
   }, []);
 
@@ -77,6 +79,7 @@ const Live = () => {
         
         }}>Start Capture</Button>
       )}
+      <AlarmButton />
       {recordedChunks.length > 0 && (
         <Button onClick={handleDownload} style={{
           margin: "20px",

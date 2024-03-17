@@ -124,7 +124,7 @@ const Navbar2 = (props) => {
                 <li className='listItem' onClick={() => setShowMediaIcons(false)} style={{
                   fontWeight: '600',
                   marginLeft: window.innerWidth <= 768 ? "10px" : "0px",
-                }}>Live Feed</li>
+                }}>Surveillance</li>
               </div>
             </NavLink>
             <NavLink to="/emergencycontacts"
