@@ -22,7 +22,9 @@ from io import BytesIO
 from twilio.rest import Client
 import ssl
 import smtplib
-from ultralytics import YOLO
+# from ultralytics import YOLO
+import winsound
+import time
 app = Flask(__name__)
 CORS(app)
 
@@ -64,6 +66,16 @@ print("Loaded emotion detection model from disk")
 
 # Define emotion dictionary
 emotion_dict = {0: "Angry", 1: "Disgusted", 2: "Fearful", 3: "Happy", 4: "Neutral", 5: "Sad", 6: "Surprised"}
+
+def ring_alarm(duration=5):
+    # Play the alarm sound (frequency, duration)
+    winsound.Beep(1000, 5000)  # Example: Beep at 1000 Hz for 1 second
+    
+    # Wait for the specified duration
+    time.sleep(duration)
+
+    # Stop the alarm sound
+    winsound.Beep(0, 0)  # Stop the beep
 
 def fetch_and_train_allowed_faces():
     global known_encodings, known_names
@@ -121,43 +133,44 @@ def calculate_intruder_score(door_detection_result, position_detection_result, f
     return intruder_score
 
 # Finding Weapons in Real Time
-def detect_objects_in_realtime_weapon(video_capture):
-    yolo_model = YOLO(r'C:\Users\Sanjay\Desktop\ace hack project\Power-Players\Backend-flask\best.pt')
-  # Open the default camera (usually the webcam)
-    weapon_detected = 0  # Initialize the variable to store whether weapon is detected or not
-    flag = False
-    while not flag:
-        ret, frame = video_capture.read()
-        if not ret:
-            break
-        results = yolo_model(frame)
+# def detect_objects_in_realtime_weapon(video_capture):
+#     yolo_model = YOLO(r'C:\Users\Sanjay\Desktop\ace hack project\Power-Players\Backend-flask\best.pt')
+#   # Open the default camera (usually the webcam)
+#     weapon_detected = 0  # Initialize the variable to store whether weapon is detected or not
+#     flag = False
+#     while not flag:
+#         ret, frame = video_capture.read()
+#         if not ret:
+#             break
+#         results = yolo_model(frame)
 
-        for result in results:
-            classes = result.names
-            cls = result.boxes.cls
-            conf = result.boxes.conf
-            detections = result.boxes.xyxy
+#         for result in results:
+#             classes = result.names
+#             cls = result.boxes.cls
+#             conf = result.boxes.conf
+#             detections = result.boxes.xyxy
 
-            for pos, detection in enumerate(detections):
-                if conf[pos] >= 0.8:
-                    xmin, ymin, xmax, ymax = detection
-                    label = f"{classes[int(cls[pos])]} {conf[pos]:.2f}" 
-                    color = (0, int(cls[pos]), 255)
-                    # cv2.rectangle(frame, (int(xmin), int(ymin)), (int(xmax), int(ymax)), color, 2)
-                    # cv2.putText(frame, label, (int(xmin), int(ymin) - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1, cv2.LINE_AA)
+#             for pos, detection in enumerate(detections):
+#                 if conf[pos] >= 0.8:
+#                     xmin, ymin, xmax, ymax = detection
+#                     label = f"{classes[int(cls[pos])]} {conf[pos]:.2f}" 
+#                     color = (0, int(cls[pos]), 255)
+#                     # cv2.rectangle(frame, (int(xmin), int(ymin)), (int(xmax), int(ymax)), color, 2)
+#                     # cv2.putText(frame, label, (int(xmin), int(ymin) - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1, cv2.LINE_AA)
                     
-                    # Check if the detected object is a weapon (assuming 'weapon' is one of the classes)
-                    if classes[int(cls[pos])] == 'Handgun':
-                        print("Weapon found")
-                        weapon_detection_result = 1 
-                        flag = True
-                        return 
-    return weapon_detected 
+#                     # Check if the detected object is a weapon (assuming 'weapon' is one of the classes)
+#                     if classes[int(cls[pos])] == 'Handgun':
+#                         print("Weapon found")
+#                         weapon_detection_result = 1 
+#                         flag = True
+#                         return 
+#     return weapon_detected 
 
 
 def start_face_recognition():
     global face_recognition_active, video_capture, stop_thread, intruder_detected
     intruder_detected = False
+    emotion_detection_result = False
     video_capture = cv2.VideoCapture(0)
     flag = 1
     flgg = 0
@@ -191,7 +204,7 @@ def start_face_recognition():
                 face_distances = face_recognition.face_distance(known_encodings, face_encodings[0])
                 best_match_index = np.argmin(face_distances)
 
-                if face_distances[best_match_index] < 0.55:
+                if face_distances[best_match_index] < 0.53:
                     name = known_names[best_match_index]
                     print(f"Known face detected: {name}")
                     face_detection_result = 1  # Set the variable to indicate face detection
@@ -212,19 +225,34 @@ def start_face_recognition():
                             'intruder_image_base64': intruder_image_base64,
                             'emotion': emotion_prediction,
                             'timestamp': current_time
-                        }
+                        } 
                         collection.insert_one(encoding_data)
                         print("Hello")
-                        if calculate_intruder_score(door_detection_result, position_detection_result, face_detection_result, emotion_detection_result, weapon_detection_result)>0.5:
-                            intruder_detected = True
-                            print("Intruder detected!")
-                            requests.post('http://127.0.0.1:7000/send_email')
-                            requests.post('http://127.0.0.1:7000/send_to_emergencycontacts')
+                        # if calculate_intruder_score(door_detection_result, position_detection_result, face_detection_result, emotion_detection_result, weapon_detection_result)>0.5:
+                        intruder_detected = True
+                        print("Intruder detected!")
+                        if intruder_detected:
+                            response = requests.get('http://localhost:5000/getalarmstatus')
+                            if response.status_code == 200:
+                                alarmstatus = response.json()
+                                if alarmstatus == True:
+                                    # Your code to handle the alarm being true
+                                    print("Alarm is on.")
+                                else:
+                                    print("Alarm is off.")
+                            else:
+                                print("Failed to get alarm status.")
+                        print("ALARM STATUS :", alarmstatus)
+                        requests.post('http://127.0.0.1:7000/send_email')
+                        requests.post('http://127.0.0.1:7000/send_to_emergencycontacts')
+                        flag += 1
+                        
+                        if flag%20==0:
                             requests.post('http://127.0.0.1:7000/send_sms')
-                            flag += 1
-                            
-                            if flag%20==0:
-                                requests.post('http://127.0.0.1:7000/send_sms_to_emergencycontacts')
+                            requests.post('http://127.0.0.1:7000/send_sms_to_emergencycontacts')
+
+                        if alarmstatus=="true":
+                            ring_alarm()
 
                           # Set intruder flag to prevent further captures
         cv2.imshow('Video', frame)

@@ -68,8 +68,10 @@ router.get('/getalarmstatus', async (req, res) => {
     console.log("Inside getalarmstatus")
     try {
         const status = await Status.find();
-        // console.log("CURRENT STATUS: ", status[0].systemStatus);
-        return res.status(200).json(statusstatus[0].systemStatus);
+        console.log("CURRENT STATUS on line 71: ", status[0].systemStatus);
+        const value = status[0].systemStatus
+        console.log("CURRENT VALUE on line 73: ", value);
+        return res.status(200).json(value);
     } catch (error) {
         return res.status(500).json({ error: "Some error occurred" });
     }
