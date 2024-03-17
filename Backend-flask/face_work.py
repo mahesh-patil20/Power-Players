@@ -251,6 +251,7 @@ def start_face_recognition():
                             requests.post('http://127.0.0.1:7000/send_sms')
                             requests.post('http://127.0.0.1:7000/send_sms_to_emergencycontacts')
 
+
                         if alarmstatus=="true":
                             ring_alarm()
 
