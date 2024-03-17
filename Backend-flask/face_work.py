@@ -151,9 +151,7 @@ def detect_objects_in_realtime_weapon(video_capture):
                         print("Weapon found")
                         weapon_detection_result = 1 
                         flag = True
-                        break
-        if flag:
-            break
+                        return weapon_detected
     return weapon_detected 
 
 

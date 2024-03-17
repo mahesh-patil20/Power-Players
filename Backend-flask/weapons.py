@@ -88,7 +88,7 @@ from ultralytics import YOLO
 
 
 def detect_objects_in_realtime():
-    yolo_model = YOLO('\\Users\\Sanjay\\Desktop\\ace hack project\\Power-Players\\Backend-flask\\best.pt')
+    yolo_model = YOLO('/Users/pranaysinghvi/Desktop/Hackathon/Power-Players/Backend-flask/best.pt')
     video_capture = cv2.VideoCapture(0)  # Open the default camera (usually the webcam)
     
     while True:
@@ -119,3 +119,4 @@ def detect_objects_in_realtime():
     
     video_capture.release()
     cv2.destroyAllWindows()
+detect_objects_in_realtime()
