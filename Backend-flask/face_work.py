@@ -15,7 +15,7 @@ from pymongo import MongoClient
 from dotenv import load_dotenv
 import base64
 import black_screen
-import weapons
+# import weapons
 from keras.models import model_from_json
 from PIL import Image
 from io import BytesIO
@@ -143,15 +143,15 @@ def detect_objects_in_realtime_weapon(video_capture):
                     xmin, ymin, xmax, ymax = detection
                     label = f"{classes[int(cls[pos])]} {conf[pos]:.2f}" 
                     color = (0, int(cls[pos]), 255)
-                    cv2.rectangle(frame, (int(xmin), int(ymin)), (int(xmax), int(ymax)), color, 2)
-                    cv2.putText(frame, label, (int(xmin), int(ymin) - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1, cv2.LINE_AA)
+                    # cv2.rectangle(frame, (int(xmin), int(ymin)), (int(xmax), int(ymax)), color, 2)
+                    # cv2.putText(frame, label, (int(xmin), int(ymin) - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1, cv2.LINE_AA)
                     
                     # Check if the detected object is a weapon (assuming 'weapon' is one of the classes)
-                    if classes[int(cls[pos])] == 'weapon':
+                    if classes[int(cls[pos])] == 'Handgun':
                         print("Weapon found")
                         weapon_detection_result = 1 
                         flag = True
-                        return weapon_detected
+                        return 
     return weapon_detected 
 
 
@@ -178,7 +178,7 @@ def start_face_recognition():
 
  # Skip face recognition if the camera is covered
         
-        detect_objects_in_realtime_weapon(video_capture)
+        # detect_objects_in_realtime_weapon(video_capture)
 
         ret, frame = video_capture.read()
         face_locations = face_recognition.face_locations(frame)
@@ -220,9 +220,9 @@ def start_face_recognition():
                             print("Intruder detected!")
                             requests.post('http://127.0.0.1:7000/send_email')
                             requests.post('http://127.0.0.1:7000/send_to_emergencycontacts')
+                            requests.post('http://127.0.0.1:7000/send_sms')
                             flag += 1
-                            if flag%20==0:
-                                requests.post('http://127.0.0.1:7000/send_sms')
+                            
                             if flag%20==0:
                                 requests.post('http://127.0.0.1:7000/send_sms_to_emergencycontacts')
 
@@ -281,7 +281,7 @@ def sending():
     email_password = 'ixwx wnax livu utbh'  # Insert your email password here
     email_receiver = 'akash.panicker@spit.ac.in'
 
-    subject = 'Alert!!!! Intruder at your house'
+    subject = 'CHOR CHOR CHOR'
 
     # URL where the Base64-encoded image is located
     base64_image_url = 'http://localhost:5000/getLatestIntruderImage'  # Replace with the actual URL
