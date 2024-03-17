@@ -46,7 +46,7 @@ router.post('/setalarmstatus', async (req, res) => {
     console.log("Inside setalarmstatus")
     try {
         const currStatus = req.body.status;
-        console.log("status:", currStatus);
+        // console.log("status:", currStatus);
 
         // Find the existing document or create a new one if it doesn't exist
         const result = await Status.findOneAndUpdate(
