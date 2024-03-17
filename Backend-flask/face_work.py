@@ -122,7 +122,7 @@ def calculate_intruder_score(door_detection_result, position_detection_result, f
 
 # Finding Weapons in Real Time
 def detect_objects_in_realtime_weapon():
-    yolo_model = YOLO('/Users/pranaysinghvi/Desktop/Hackathon/Power-Players/Backend-flask/best.pt')
+    yolo_model = YOLO('\\Users\\Sanjay\\Desktop\\ace hack project\\Power-Players\B\ackend-flask\\best.pt')
     video_capture = cv2.VideoCapture(0)  # Open the default camera (usually the webcam)
     weapon_detected = 0  # Initialize the variable to store whether weapon is detected or not
     
