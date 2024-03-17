@@ -15,17 +15,24 @@ from pymongo import MongoClient
 from dotenv import load_dotenv
 import base64
 import black_screen
+import weapons
 from keras.models import model_from_json
 from PIL import Image
 from io import BytesIO
 from twilio.rest import Client
 import ssl
 import smtplib
-
+from ultralytics import YOLO
 app = Flask(__name__)
 CORS(app)
 
 env_path = '../server/config.env'  # Update with your actual path
+
+door_detection_result = 0  
+position_detection_result = 0 
+face_detection_result = 0  
+emotion_detection_result = 0  
+weapon_detection_result = 0 
 
 # Load environment variables from the specified .env file
 load_dotenv(dotenv_path=env_path)
@@ -78,6 +85,84 @@ def fetch_and_train_allowed_faces():
                 known_names.extend([user['name']] * len(face_encodings))
     print("Faces fetched and trained successfully.")
 
+def calculate_intruder_score(door_detection_result, position_detection_result, face_detection_result, emotion_detection_result, weapon_detection_result):
+    # Assign weights to each model
+    weights_for_intru = {
+        'door_detection': 5,
+        'position_detection': 3,
+        'face_detection': 4,
+        'emotion_detection': 2,
+        'weapon_detection': 5,
+    }
+    weights_for_non_intru = {
+        'door_detection': 5,
+        'position_detection': 3,
+        'face_detection': 4,
+        'emotion_detection': 2,
+        'weapon_detection': 5,
+    }
+    intru = (weights_for_intru['door_detection'] * door_detection_result +
+        weights_for_intru['position_detection'] * position_detection_result +
+        weights_for_intru['face_detection'] * face_detection_result +
+        weights_for_intru['emotion_detection'] * emotion_detection_result +
+        weights_for_intru['weapon_detection'] * weapon_detection_result )
+    
+    non_intru = (weights_for_non_intru['door_detection'] * door_detection_result +
+        weights_for_non_intru['position_detection'] * position_detection_result +
+        weights_for_non_intru['face_detection'] * face_detection_result +
+        weights_for_non_intru['emotion_detection'] * emotion_detection_result +
+        weights_for_non_intru['weapon_detection'] * weapon_detection_result )
+    
+    # Calculate intruder score
+    intruder_score = (
+        intru
+    )/ intru + non_intru
+    
+    return intruder_score
+
+# Finding Weapons in Real Time
+def detect_objects_in_realtime_weapon():
+    yolo_model = YOLO('/Users/pranaysinghvi/Desktop/Hackathon/Power-Players/Backend-flask/best.pt')
+    video_capture = cv2.VideoCapture(0)  # Open the default camera (usually the webcam)
+    weapon_detected = 0  # Initialize the variable to store whether weapon is detected or not
+    
+    while True:
+        ret, frame = video_capture.read()
+        if not ret:
+            break
+        results = yolo_model(frame)
+
+        for result in results:
+            classes = result.names
+            cls = result.boxes.cls
+            conf = result.boxes.conf
+            detections = result.boxes.xyxy
+
+            for pos, detection in enumerate(detections):
+                if conf[pos] >= 0.8:
+                    xmin, ymin, xmax, ymax = detection
+                    label = f"{classes[int(cls[pos])]} {conf[pos]:.2f}" 
+                    color = (0, int(cls[pos]), 255)
+                    cv2.rectangle(frame, (int(xmin), int(ymin)), (int(xmax), int(ymax)), color, 2)
+                    cv2.putText(frame, label, (int(xmin), int(ymin) - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1, cv2.LINE_AA)
+                    
+                    # Check if the detected object is a weapon (assuming 'weapon' is one of the classes)
+                    if classes[int(cls[pos])] == 'weapon':
+                        print("Weapon found")
+                        weapon_detection_result = 1  # Set the variable to indicate weapon detection
+
+        cv2.imshow('Real-time Object Detection', frame)
+        
+        # Press 'q' to exit the loop
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+    
+    video_capture.release()
+    cv2.destroyAllWindows()
+    
+    return weapon_detected 
+
+
 def start_face_recognition():
     global face_recognition_active, video_capture, stop_thread, intruder_detected
     intruder_detected = False
@@ -96,6 +181,8 @@ def start_face_recognition():
             print("Camera is covered. Face recognition cannot proceed.")
             continue  # Skip face recognition if the camera is covered
         
+        detect_objects_in_realtime_weapon()
+
         ret, frame = video_capture.read()
         face_locations = face_recognition.face_locations(frame)
          
@@ -110,16 +197,20 @@ def start_face_recognition():
                 if face_distances[best_match_index] < 0.55:
                     name = known_names[best_match_index]
                     print(f"Known face detected: {name}")
+                    face_detection_result = 1  # Set the variable to indicate face detection
                     intruder_detected = False  # Reset the intruder flag
                 else:
                     if not intruder_detected:  # Capture intruder encoding only once
                         print("Unknown face detected. Encoding intruder image...")
+                        face_detection_result = 0  # Set the variable to indicate face detection
                         # Encode the intruder image using base64
                         _, encoded_image = cv2.imencode('.jpg', frame[top:bottom, left:right])
                         intruder_image_base64 = base64.b64encode(encoded_image).decode('utf-8')
                         current_time = str(datetime.datetime.now())
                         # Detect emotion of the intruder
                         emotion_prediction = detect_emotion(frame[top:bottom, left:right])
+                        if emotion_prediction == 'Angry' or emotion_prediction == 'Disgusted' or emotion_prediction == 'Fearful' or emotion_prediction == 'Sad':
+                            emotion_detection_result = 1
                         encoding_data = {
                             'intruder_image_base64': intruder_image_base64,
                             'emotion': emotion_prediction,
@@ -127,16 +218,18 @@ def start_face_recognition():
                         }
                         collection.insert_one(encoding_data)
                         print("Hello")
-                        requests.post('http://127.0.0.1:7000/send_email')
-                        requests.post('http://127.0.0.1:7000/send_to_emergencycontacts')
-                        flag += 1
-                        if flag%20==0:
-                            requests.post('http://127.0.0.1:7000/send_sms')
-                        
-                        if flag%20==0:
-                            requests.post('http://127.0.0.1:7000/send_sms_to_emergencycontacts')
-                        print("World")
-                        intruder_detected = True  # Set intruder flag to prevent further captures
+                        if calculate_intruder_score(door_detection_result, position_detection_result, face_detection_result, emotion_detection_result, weapon_detection_result)>0.5:
+                            intruder_detected = True
+                            print("Intruder detected!")
+                            requests.post('http://127.0.0.1:7000/send_email')
+                            requests.post('http://127.0.0.1:7000/send_to_emergencycontacts')
+                            flag += 1
+                            if flag%20==0:
+                                requests.post('http://127.0.0.1:7000/send_sms')
+                            if flag%20==0:
+                                requests.post('http://127.0.0.1:7000/send_sms_to_emergencycontacts')
+
+                          # Set intruder flag to prevent further captures
         cv2.imshow('Video', frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
