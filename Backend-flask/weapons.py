@@ -119,6 +119,4 @@ def detect_objects_in_realtime():
     
     video_capture.release()
     cv2.destroyAllWindows()
-
-# Call the function to start real-time object detection
 detect_objects_in_realtime()

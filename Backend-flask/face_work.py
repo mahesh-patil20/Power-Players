@@ -121,12 +121,12 @@ def calculate_intruder_score(door_detection_result, position_detection_result, f
     return intruder_score
 
 # Finding Weapons in Real Time
-def detect_objects_in_realtime_weapon():
-    yolo_model = YOLO('/Users/pranaysinghvi/Desktop/Hackathon/Power-Players/Backend-flask/best.pt')
-    video_capture = cv2.VideoCapture(0)  # Open the default camera (usually the webcam)
+def detect_objects_in_realtime_weapon(video_capture):
+    yolo_model = YOLO(r'C:\Users\Sanjay\Desktop\ace hack project\Power-Players\Backend-flask\best.pt')
+  # Open the default camera (usually the webcam)
     weapon_detected = 0  # Initialize the variable to store whether weapon is detected or not
-    
-    while True:
+    flag = False
+    while not flag:
         ret, frame = video_capture.read()
         if not ret:
             break
@@ -149,17 +149,9 @@ def detect_objects_in_realtime_weapon():
                     # Check if the detected object is a weapon (assuming 'weapon' is one of the classes)
                     if classes[int(cls[pos])] == 'weapon':
                         print("Weapon found")
-                        weapon_detection_result = 1  # Set the variable to indicate weapon detection
-
-        cv2.imshow('Real-time Object Detection', frame)
-        
-        # Press 'q' to exit the loop
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
-    
-    video_capture.release()
-    cv2.destroyAllWindows()
-    
+                        weapon_detection_result = 1 
+                        flag = True
+                        return weapon_detected
     return weapon_detected 
 
 
@@ -186,7 +178,7 @@ def start_face_recognition():
 
  # Skip face recognition if the camera is covered
         
-        detect_objects_in_realtime_weapon()
+        detect_objects_in_realtime_weapon(video_capture)
 
         ret, frame = video_capture.read()
         face_locations = face_recognition.face_locations(frame)
