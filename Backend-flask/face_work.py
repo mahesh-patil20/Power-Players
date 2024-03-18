@@ -204,7 +204,7 @@ def start_face_recognition():
                 face_distances = face_recognition.face_distance(known_encodings, face_encodings[0])
                 best_match_index = np.argmin(face_distances)
 
-                if face_distances[best_match_index] < 0.53:
+                if face_distances[best_match_index] < 0.53  :
                     name = known_names[best_match_index]
                     print(f"Known face detected: {name}")
                     face_detection_result = 1  # Set the variable to indicate face detection
@@ -245,9 +245,10 @@ def start_face_recognition():
                         print("ALARM STATUS :", alarmstatus)
                         requests.post('http://127.0.0.1:7000/send_email')
                         requests.post('http://127.0.0.1:7000/send_to_emergencycontacts')
+
                         flag += 1
                         
-                        if flag%20==0:
+                        if flag%1000==0:
                             requests.post('http://127.0.0.1:7000/send_sms')
                             requests.post('http://127.0.0.1:7000/send_sms_to_emergencycontacts')
 
@@ -310,7 +311,7 @@ def sending():
     email_password = 'ixwx wnax livu utbh'  # Insert your email password here
     email_receiver = 'akash.panicker@spit.ac.in'
 
-    subject = 'CHOR CHOR CHOR'
+    subject = 'Intruder alert! Emergency'
 
     # URL where the Base64-encoded image is located
     base64_image_url = 'http://localhost:5000/getLatestIntruderImage'  # Replace with the actual URL
