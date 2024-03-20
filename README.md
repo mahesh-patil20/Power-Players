@@ -70,4 +70,4 @@ This project implements a sophisticated intruder detection system leveraging a s
 
 **Contact**
 
-For questions or support, please reach out to [Your Contact Information]. 
+For questions or support, please reach out to mahesh.patil@spit.ac.in akash.panicker@spit.ac.in pranay.singhvi@spit.ac.in udit.rao@spit.ac.in
