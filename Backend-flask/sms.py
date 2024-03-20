@@ -17,4 +17,4 @@ def send_sms(to, body):
         print("Failed to send SMS:", str(e))
 
 
-send_sms('+919167340521', 'Intrusion detected at your home!')
+send_sms('+', 'Intrusion detected at your home!')

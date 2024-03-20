@@ -523,7 +523,7 @@ def send_message():
             print("SMS sent successfully with SID:", message.sid)
         except Exception as e:
             print("Failed to send SMS:", str(e))
-    send_sms('+919167340521', 'Intrusion detected at your home!')
+    send_sms('+', 'Intrusion detected at your home!')
 
 
 
@@ -628,7 +628,7 @@ def send_message_to_emergencycontacts():
             print("SMS sent successfully with SID:", message.sid)
         except Exception as e:
             print("Failed to send SMS:", str(e))
-    send_sms('+919167340521', 'Intrusion detected at your home!')
+    send_sms('+', 'Intrusion detected at your home!')
 
 
 @app.route('/fetch_intruders', methods=['GET'])
