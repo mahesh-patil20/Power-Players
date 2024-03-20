@@ -56,6 +56,10 @@ face_recognition_active = False
 video_capture = None
 stop_thread = False
 
+
+account_sid = os.getenv('TWELLIO_ACCOUNT_SID')
+auth_token = os.getenv('TWELLIO_AUTH_TOKEN')
+
 # Load emotion detection model
 json_file = open('models/emotion_model.json', 'r')
 loaded_model_json = json_file.read()
@@ -504,8 +508,7 @@ def send_to_auth():
 
 @app.route('/send_sms', methods = ['GET','POST'])
 def send_message():
-    account_sid = 'AC108ea743fcf1a93154a057452af67e27'
-    auth_token = '69ee464f0fdc75098208155e56059afd'
+    
 
     # Initialize Twilio Client
     client = Client(account_sid, auth_token)
@@ -604,8 +607,6 @@ def send_to_emergencycontacts():
 
 @app.route('/send_sms_to_emergencycontacts', methods = ['GET','POST'])
 def send_message_to_emergencycontacts():
-    account_sid = 'AC108ea743fcf1a93154a057452af67e27'
-    auth_token = '69ee464f0fdc75098208155e56059afd'
 
     # Fetch emergency contacts from MongoDB
     emergency_contacts = collection_emergencycontacts.find({}, {'name': 1, 'contactNumber': 1, '_id': 0})
