@@ -13,7 +13,7 @@ from io import BytesIO
 
 # Email credentials and recipient
 email_sender = 'maxfurry3009@gmail.com'
-email_password = 'ixwx wnax livu utbh'  # Insert your email password here
+email_password = ''  # Insert your email password here
 email_receiver = 'mahesh.patil@spit.ac.in'
 
 subject = 'Check Your Child History'

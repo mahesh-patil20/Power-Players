@@ -312,7 +312,7 @@ def sending():
     # FINAL WORKING AUTOMATED EMAIL SYSTEM FOR INTRUDER DETECTION
 # Email credentials and recipient
     email_sender = 'maxfurry3009@gmail.com'
-    email_password = 'ixwx wnax livu utbh'  # Insert your email password here
+    email_password = ''  # Insert your email password here
     email_receiver = 'akash.panicker@spit.ac.in'
 
     subject = 'Intruder alert! Emergency'
@@ -388,7 +388,7 @@ def sending_black():
     # FINAL WORKING AUTOMATED EMAIL SYSTEM FOR INTRUDER DETECTION
 # Email credentials and recipient
     email_sender = 'maxfurry3009@gmail.com'
-    email_password = 'ixwx wnax livu utbh'  # Insert your email password here
+    email_password = ''  # Insert your email password here
     email_receiver = 'akash.panicker@spit.ac.in'
 
     subject = 'Alert!!!! Intruder blocked your cameras.'
@@ -436,7 +436,7 @@ def sending_black():
 @app.route('/send_to_authority', methods = ['POST','GET'])
 def send_to_auth():
     email_sender = 'maxfurry3009@gmail.com'
-    email_password = 'ixwx wnax livu utbh'  # Insert your email password here
+    email_password = ''  # Insert your email password here
     email_receiver = 'mahesh.patil@spit.ac.in'
 
     subject = 'Hello Authorities, we have a intruder SEND HELP'
@@ -531,7 +531,7 @@ def send_message():
 def send_to_emergencycontacts():        
     # Email credentials and recipient
     email_sender = 'maxfurry3009@gmail.com'
-    email_password = 'ixwx wnax livu utbh'  # Insert your email password here
+    email_password = ''  # Insert your email password here
     email_receiver = 'mahesh.patil@spit.ac.in'
 
     subject = 'ALERT !! Intruder Detected'

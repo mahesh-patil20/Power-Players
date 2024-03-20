@@ -88,7 +88,7 @@ from ultralytics import YOLO
 
 
 def detect_objects_in_realtime():
-    yolo_model = YOLO('C:\Users\Sanjay\Desktop\ace hack project\Power-Players\Backend-flask\best.pt')
+    yolo_model = YOLO('') # Your YOLO Link
     video_capture = cv2.VideoCapture(0)  # Open the default camera (usually the webcam)
     
     while True:
